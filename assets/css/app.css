@@ -1,0 +1,24 @@
+﻿/* ==============================
+   CSS principal del proyecto
+   Edita los estilos en su carpeta correspondiente.
+============================== */
+
+/* Base */
+@import url('./base/global.css?v=2');
+
+/* Layout */
+@import url('./layout/header.css?v=6');
+@import url('./layout/footer.css?v=3');
+
+/* Componentes reutilizables */
+@import url('./componentes/ui.css?v=3');
+@import url('./componentes/styles.css?v=2');
+
+/* Paginas */
+@import url('./paginas/index.css?v=17');
+@import url('./paginas/contacto.css?v=2');
+@import url('./paginas/admin.css?v=2');
+@import url('./paginas/crear.css?v=2');
+@import url('./paginas/menu.css?v=2');
+@import url('./paginas/login.css?v=2');
+@import url('./paginas/semana6.css?v=1');
