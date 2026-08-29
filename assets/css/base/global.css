@@ -1,0 +1,101 @@
+﻿*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+    scroll-behavior:smooth;
+}
+
+html,
+body{
+    background-color:#050505;
+    background-image:
+        linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px),
+        url('../../imagenes/137042075-grid-square-graph-line-full-page-on-black-paper-background-paper-grid-square-graph-line-texture-of.jpg');
+    background-size:32px 32px;
+    background-attachment:fixed;
+}
+
+body{
+    color:#fff;
+    line-height:1.5;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background:radial-gradient(circle at top, rgba(0,208,132,.05), transparent 35%);
+    z-index:-1;
+}
+
+a{
+    color:inherit;
+    text-decoration:none;
+    transition:.35s;
+}
+
+img{
+    width:100%;
+    display:block;
+    transition:.5s;
+}
+
+section{
+    padding:110px 0;
+}
+
+section h2{
+    text-align:center;
+    font-size:58px;
+    font-weight:900;
+    margin-bottom:15px;
+    text-shadow:0 0 14px rgba(255,255,255,.2);
+    animation:slideDownSoft 1.2s ease;
+}
+
+.container{
+    width:90%;
+    max-width:1200px;
+    margin:auto;
+}
+
+.subtitulo{
+    max-width:650px;
+    margin:0 auto 50px;
+    color:#9d9d9d;
+    text-align:center;
+    font-size:18px;
+    animation:slideDownSoft 1.4s ease;
+}
+
+@keyframes floatSoft{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-6px);}
+}
+
+@keyframes slideDown{
+    from{opacity:0; transform:translateY(-45px);}
+    to{opacity:1; transform:translateY(0);}
+}
+
+@keyframes slideDownSoft{
+    from{opacity:0; transform:translateY(-20px);}
+    to{opacity:1; transform:translateY(0);}
+}
+
+@keyframes floatHero{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(12px);}
+}
+
+@keyframes fadeTab{
+    from{opacity:0; transform:translateY(15px);}
+    to{opacity:1; transform:translateY(0);}
+}
+
+@media(max-width:900px){
+    section h2{font-size:42px;}
+}
