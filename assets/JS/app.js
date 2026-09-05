@@ -1,5 +1,6 @@
 (() => {
     const cartKey = 'francy-tamayo-cart';
+    const customerDataKey = 'francy-tamayo-customer-data';
     const money = value => new Intl.NumberFormat('es-CO', {style: 'currency', currency: 'COP', maximumFractionDigits: 0}).format(value);
     const catalog = [
         ['Retrato Golden Retriever', 'Pintura al óleo', 280000, 'assets/imagenes/productos/cuadro-golondrina.png'], ['Perro en acuarela', 'Acuarela', 195000, 'assets/imagenes/productos/cuadro-jilguero.png'],
@@ -60,10 +61,37 @@
         saveCart(cart); renderCart();
     });
     const customerForm = document.querySelector('#customer-form');
-    if (customerForm) customerForm.addEventListener('submit', event => {
-        event.preventDefault(); const feedback = document.querySelector('#order-feedback');
-        if (!getCart().length) { feedback.textContent = 'Añade al menos un producto antes de confirmar.'; return; }
-        feedback.textContent = 'Pedido preparado. Te contactaremos por WhatsApp para confirmar los detalles y el pago.';
-    });
+    if (customerForm) {
+        const savedStatus = document.querySelector('#saved-data-status');
+        try {
+            const savedData = JSON.parse(localStorage.getItem(customerDataKey));
+            if (savedData) {
+                Object.entries(savedData).forEach(([name, value]) => {
+                    const field = customerForm.elements[name];
+                    if (field && field.type !== 'checkbox') field.value = value;
+                });
+                if (savedStatus) savedStatus.textContent = 'Datos recuperados para ti';
+            }
+        } catch { /* Los datos del formulario siguen disponibles aunque el navegador bloquee el almacenamiento. */ }
+
+        customerForm.addEventListener('input', () => {
+            const saveChoice = customerForm.elements.save_data;
+            if (!saveChoice.checked) return;
+            const values = Object.fromEntries(new FormData(customerForm).entries());
+            delete values.save_data;
+            localStorage.setItem(customerDataKey, JSON.stringify(values));
+            if (savedStatus) savedStatus.textContent = 'Datos guardados en este dispositivo';
+        });
+        customerForm.addEventListener('submit', event => {
+            event.preventDefault(); const feedback = document.querySelector('#order-feedback');
+            if (!getCart().length) { feedback.textContent = 'Añade al menos un producto antes de confirmar.'; return; }
+            if (customerForm.elements.save_data.checked) {
+                const values = Object.fromEntries(new FormData(customerForm).entries());
+                delete values.save_data;
+                localStorage.setItem(customerDataKey, JSON.stringify(values));
+            } else localStorage.removeItem(customerDataKey);
+            feedback.textContent = 'Encargo preparado. Te contactaremos por WhatsApp para confirmar los detalles, referencias y pago.';
+        });
+    }
     updateCount(); renderCart();
 })();
