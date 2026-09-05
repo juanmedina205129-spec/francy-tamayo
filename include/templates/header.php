@@ -61,7 +61,7 @@ Iniciar sesión
 <a href="<?php echo BASE_URL;?>buscador.php" class="nav-search" aria-label="Buscar productos">⌕</a>
 <a href="<?php echo BASE_URL;?>carrito.php" class="nav-cart" aria-label="Ver carrito">♧<span class="cart-count" data-cart-count>0</span></a>
 </div>
-<a href="<?php echo BASE_URL;?>contacto.php" class="btn-nav">WhatsApp</a>
+<a target="_blank" href="https://wa.me/573184597719" class="btn-nav">WhatsApp</a>
 
 </div>
 
