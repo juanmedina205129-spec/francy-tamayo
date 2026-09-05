@@ -1,64 +1,71 @@
-
 <?php
-
 require_once __DIR__ . '/../include/funciones.php';
 auth();
 
-require_once __DIR__ . '/../include/config/database.php';
-$db = conectarDB();
+$catalogo = [
+    ['nombre' => 'Pinturas', 'cantidad' => 6, 'detalle' => 'Obras disponibles en el catálogo', 'enlace' => BASE_URL . 'pinturas.php', 'icono' => '✦'],
+    ['nombre' => 'Retratos', 'cantidad' => 3, 'detalle' => 'Encargos de mascotas y animales', 'enlace' => BASE_URL . 'retratos.php', 'icono' => '♡'],
+    ['nombre' => 'Camisetas', 'cantidad' => 4, 'detalle' => 'Diseños listos para personalizar', 'enlace' => BASE_URL . 'camisetas.php', 'icono' => '◌'],
+];
 
-incluirTemplates('header'); 
+$totalProductos = array_sum(array_column($catalogo, 'cantidad'));
+$usuario = htmlspecialchars($_SESSION['usuario'] ?? 'Administradora');
 
-
-
-
-
-// ======================
-// CONSULTAS ESTADÍSTICAS
-// ======================
-$resultTotal = mysqli_query($db, "SELECT COUNT(*) AS total FROM plato");
-$total = mysqli_fetch_assoc($resultTotal)['total'];
-
-$resultActivos = mysqli_query($db, "SELECT COUNT(*) AS activos FROM plato WHERE activo=1");
-$activos = mysqli_fetch_assoc($resultActivos)['activos'];
-
-$resultInactivos = mysqli_query($db, "SELECT COUNT(*) AS inactivos FROM plato WHERE activo=0");
-$inactivos = mysqli_fetch_assoc($resultInactivos)['inactivos'];
+incluirTemplates('header');
 ?>
 
-<section class="admin-container admin-container-dashboard">
-
-    <main class="admin-card dashboard-card">
-        <h1>Dashboard Administrador</h1>
-
-        <!-- ==================== -->
-        <!-- ESTADÍSTICAS DE PLATOS -->
-        <!-- ==================== -->
-        <div class="adm-stats">
-            <div class="stat-card stat-total">
-                <p>Total Platos</p>
-                <h2><?= $total ?></h2>
+<main class="admin-dashboard-page">
+    <section class="admin-dashboard container" aria-labelledby="dashboard-title">
+        <div class="admin-welcome">
+            <div>
+                <span class="admin-eyebrow">Administración · Francy Tamayo</span>
+                <h1 id="dashboard-title">Hola, <?= $usuario ?></h1>
+                <p>Desde aquí tienes una vista clara del catálogo público y accesos rápidos para revisarlo.</p>
             </div>
-            <div class="stat-card stat-activos">
-                <p>Activos</p>
-                <h2><?= $activos ?></h2>
-            </div>
-            <div class="stat-card stat-inactivos">
-                <p>Inactivos</p>
-                <h2><?= $inactivos ?></h2>
-            </div>
+            <a href="<?= BASE_URL ?>index.php" class="admin-outline-link">Ver tienda ↗</a>
         </div>
 
-        <!-- ==================== -->
-        <!-- BOTONES DE ACCIÓN -->
-        <!-- ==================== -->
-        <div class="adm-buttons">
-            <a href="menu/crear.php" class="btn-crear">➕ Crear Plato</a>
-            <a href="menu/index.php" class="btn-editar">✏️ Editar Listado</a>
-            <a href="<?php echo BASE_URL; ?>index.php" class="btn-salir">🚪 Salir</a>
-        </div>
+        <section class="admin-overview" aria-label="Resumen del catálogo">
+            <article class="admin-total-card">
+                <span class="admin-card-icon">✦</span>
+                <div><p>Productos publicados</p><strong><?= $totalProductos ?></strong></div>
+                <small>Catálogo actual</small>
+            </article>
+            <?php foreach ($catalogo as $categoria): ?>
+                <article class="admin-stat-card">
+                    <span class="admin-card-icon"><?= $categoria['icono'] ?></span>
+                    <p><?= $categoria['nombre'] ?></p>
+                    <strong><?= $categoria['cantidad'] ?></strong>
+                    <span><?= $categoria['detalle'] ?></span>
+                </article>
+            <?php endforeach; ?>
+        </section>
 
-    </main>
-</section>
+        <section class="admin-actions-panel" aria-labelledby="admin-actions-title">
+            <div class="admin-panel-heading">
+                <div>
+                    <span class="admin-eyebrow">Acciones rápidas</span>
+                    <h2 id="admin-actions-title">Revisa el catálogo</h2>
+                </div>
+                <p>Los enlaces se abren en la tienda para comprobar cómo ven los clientes cada sección.</p>
+            </div>
 
-<?php include '../include/templates/footer.php'; ?>
+            <div class="admin-action-grid">
+                <?php foreach ($catalogo as $categoria): ?>
+                    <a href="<?= $categoria['enlace'] ?>" class="admin-action-card">
+                        <span><?= $categoria['icono'] ?></span>
+                        <div><strong><?= $categoria['nombre'] ?></strong><small>Ver sección pública</small></div>
+                        <b>→</b>
+                    </a>
+                <?php endforeach; ?>
+                <a href="<?= BASE_URL ?>contacto.php" class="admin-action-card admin-action-featured">
+                    <span>✉</span>
+                    <div><strong>Solicitudes de clientes</strong><small>Abrir página de contacto</small></div>
+                    <b>→</b>
+                </a>
+            </div>
+        </section>
+    </section>
+</main>
+
+<?php include __DIR__ . '/../include/templates/footer.php'; ?>

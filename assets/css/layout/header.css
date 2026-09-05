@@ -36,6 +36,11 @@ nav{
     gap:24px;
 }
 
+.nav-logout{
+    display:flex;
+    margin:0;
+}
+
 nav a{
     position:relative;
     color:#5f574b;
@@ -85,6 +90,8 @@ nav .btn-salir{
     background:#ffe3d8 !important;
     color:#b64a38 !important;
     border:1px solid #f5c5b6 !important;
+    font:inherit;
+    cursor:pointer;
 }
 
 .nav-user::after,

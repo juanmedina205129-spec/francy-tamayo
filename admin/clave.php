@@ -1,5 +1,4 @@
 <?php
-$password = password_hash("1234", PASSWORD_DEFAULT);
-
-echo $password;
-?>
+// Este archivo se mantenía del prototipo y exponía un hash al acceder a la URL.
+http_response_code(404);
+exit;

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Francy Tamayo</title>
-<link rel="stylesheet" href="<?php echo BASE_URL;?>assets/css/app.css?v=9">
+<link rel="stylesheet" href="<?php echo BASE_URL;?>assets/css/app.css?v=10">
 
 <!-- jQuery  -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -35,16 +35,17 @@
 <a href="<?php echo BASE_URL;?>camisetas.php" class="<?php echo $paginaActual === 'camisetas.php' ? 'active' : ''; ?>">Camisetas</a>
 <a href="<?php echo BASE_URL;?>como-funciona.php" class="<?php echo $paginaActual === 'como-funciona.php' ? 'active' : ''; ?>">Como funciona</a>
 <a href="<?php echo BASE_URL;?>contacto.php">Contacto</a>
-<?php if (session_status() === PHP_SESSION_NONE) session_start(); ?>
+<?php iniciarSesion(); ?>
 
 <?php if (!empty($_SESSION['login'])): ?>
 
 <!-- 🔐 Usuario logueado -->
 <a href="<?= BASE_URL; ?>admin/index.php" class="nav-user">👤 <?= $_SESSION['usuario']; ?></a>
 
-<a href="<?= BASE_URL; ?>admin/logout.php" class="btn-salir">
-🚪 Salir
-</a>
+<form class="nav-logout" method="POST" action="<?= BASE_URL; ?>admin/logout.php">
+<input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrfToken()) ?>">
+<button type="submit" class="btn-salir">Cerrar sesión</button>
+</form>
 
 <?php else: ?>
 
