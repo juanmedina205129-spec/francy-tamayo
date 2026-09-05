@@ -152,25 +152,25 @@ incluirTemplates('header');
 
             <div class="steps-grid">
                 <article>
-                    <img src="<?php echo BASE_URL; ?>assets/imagenes/img/image13.png" alt="Elegir producto">
+                    <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/cuadro-golondrina.png" alt="Ilustración de golondrina para elegir tu pieza">
                     <span>01</span>
                     <h3>Elige o encarga</h3>
                     <p>Navega el catalogo o solicita un diseño completamente personalizado.</p>
                 </article>
                 <article>
-                    <img src="<?php echo BASE_URL; ?>assets/imagenes/img/image14.png" alt="Cotizacion personalizada">
+                    <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/estuche-azulejo.png" alt="Ilustración de ave para cotización personalizada">
                     <span>02</span>
                     <h3>Cotizacion</h3>
                     <p>Te contactamos por WhatsApp para confirmar detalles, tamaño y precio final.</p>
                 </article>
                 <article>
-                    <img src="<?php echo BASE_URL; ?>assets/imagenes/img/image15.png" alt="Creacion de la pieza">
+                    <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/cuadro-buho.png" alt="Ilustración de búho durante la creación de la pieza">
                     <span>03</span>
                     <h3>Creamos tu pieza</h3>
                     <p>La obra se realiza con dedicacion artesanal y revision de calidad.</p>
                 </article>
                 <article>
-                    <img src="<?php echo BASE_URL; ?>assets/imagenes/img/image16.png" alt="Entrega segura">
+                    <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/cojin-jilguero.png" alt="Ilustración de jilguero para entrega segura">
                     <span>04</span>
                     <h3>Entrega segura</h3>
                     <p>Recibes tu pieza lista para disfrutar, decorar o regalar.</p>

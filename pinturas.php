@@ -36,7 +36,7 @@ incluirTemplates('header');
                 <article class="product-card">
                     <div class="product-image">
                         <span class="badge available">Disponible</span>
-                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/cuadro-golondrina.png" alt="Pintura de golondrina">
+                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/cuadro-golondrina.png" alt="Retrato de golden retriever">
                     </div>
                     <div class="product-body">
                         <span>Pintura al oleo</span>
@@ -52,7 +52,7 @@ incluirTemplates('header');
                 <article class="product-card">
                     <div class="product-image">
                         <span class="badge available">Disponible</span>
-                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/cuadro-jilguero.png" alt="Pintura de jilguero">
+                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/cuadro-jilguero.png" alt="Perro en acuarela">
                     </div>
                     <div class="product-body">
                         <span>Acuarela</span>
@@ -68,7 +68,7 @@ incluirTemplates('header');
                 <article class="product-card">
                     <div class="product-image">
                         <span class="badge custom">Agotado</span>
-                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/cuadro-plumas.png" alt="Cuadro con plumas ilustradas">
+                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/cuadro-plumas.png" alt="Dos gatitos al óleo">
                     </div>
                     <div class="product-body">
                         <span>Pintura al oleo</span>
@@ -84,7 +84,7 @@ incluirTemplates('header');
                 <article class="product-card">
                     <div class="product-image">
                         <span class="badge available">Disponible</span>
-                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/cuadro-buho.png" alt="Pintura de buho">
+                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/cuadro-buho.png" alt="Ave colorida en acuarela">
                     </div>
                     <div class="product-body">
                         <span>Acuarela</span>
@@ -100,7 +100,7 @@ incluirTemplates('header');
                 <article class="product-card">
                     <div class="product-image">
                         <span class="badge available">Disponible</span>
-                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/estuche-golondrina.png" alt="Estuche con golondrina ilustrada">
+                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/estuche-golondrina.png" alt="Martín pescador en acuarela">
                     </div>
                     <div class="product-body">
                         <span>Acuarela</span>
@@ -116,7 +116,7 @@ incluirTemplates('header');
                 <article class="product-card">
                     <div class="product-image">
                         <span class="badge available">Disponible</span>
-                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/estuche-plumas.png" alt="Estuche con plumas ilustradas">
+                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/estuche-plumas.png" alt="Perro blanco al óleo">
                     </div>
                     <div class="product-body">
                         <span>Pintura al oleo</span>

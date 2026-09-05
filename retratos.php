@@ -37,7 +37,7 @@ incluirTemplates('header');
                 <article class="product-card">
                     <div class="product-image">
                         <span class="badge custom">Por encargo</span>
-                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/cuadro-buho.png" alt="Retrato artistico de buho">
+                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/cuadro-buho.png" alt="Retrato de mascota personalizado">
                     </div>
                     <div class="product-body">
                         <span>Por encargo</span>
@@ -53,7 +53,7 @@ incluirTemplates('header');
                 <article class="product-card">
                     <div class="product-image">
                         <span class="badge custom">Por encargo</span>
-                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/cuadro-jilguero.png" alt="Retrato artistico de jilguero">
+                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/cuadro-jilguero.png" alt="Retrato canino clásico">
                     </div>
                     <div class="product-body">
                         <span>Por encargo</span>
@@ -69,7 +69,7 @@ incluirTemplates('header');
                 <article class="product-card">
                     <div class="product-image">
                         <span class="badge custom">Por encargo</span>
-                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/cojin-jilguero.png" alt="Producto artistico de jilguero">
+                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/cojin-jilguero.png" alt="Retrato doble de mascotas">
                     </div>
                     <div class="product-body">
                         <span>Por encargo</span>

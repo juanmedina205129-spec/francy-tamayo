@@ -37,7 +37,7 @@ incluirTemplates('header');
                 <article class="product-card">
                     <div class="product-image">
                         <span class="badge available">Disponible</span>
-                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/estuche-azulejo.png" alt="Estuche con ave ilustrada">
+                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/estuche-azulejo.png" alt="Camiseta con perro en acuarela">
                     </div>
                     <div class="product-body">
                         <span>Camiseta</span>
@@ -53,7 +53,7 @@ incluirTemplates('header');
                 <article class="product-card">
                     <div class="product-image">
                         <span class="badge available">Disponible</span>
-                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/estuche-plumas.png" alt="Estuche con plumas ilustradas">
+                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/estuche-plumas.png" alt="Camiseta con gato minimalista">
                     </div>
                     <div class="product-body">
                         <span>Camiseta</span>
@@ -69,7 +69,7 @@ incluirTemplates('header');
                 <article class="product-card">
                     <div class="product-image">
                         <span class="badge available">Disponible</span>
-                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/estuche-golondrina.png" alt="Estuche con golondrina ilustrada">
+                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/estuche-golondrina.png" alt="Camiseta con tigre estampado">
                     </div>
                     <div class="product-body">
                         <span>Camiseta</span>
@@ -85,7 +85,7 @@ incluirTemplates('header');
                 <article class="product-card">
                     <div class="product-image">
                         <span class="badge custom">Por encargo</span>
-                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/estuche-buho.png" alt="Estuche con buho ilustrado">
+                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/estuche-buho.png" alt="Camiseta de mascota personalizada">
                     </div>
                     <div class="product-body">
                         <span>Camiseta</span>
