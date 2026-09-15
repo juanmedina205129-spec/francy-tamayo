@@ -96,7 +96,7 @@ incluirTemplates('header');
     <div>
         <h1>Editar producto</h1>
         <div class="botondeadmin3">
-            <a href="<?php echo BASE_URL;?>admin/menu/index.php">tabla</a>
+            <a href="<?php echo BASE_URL;?>admin/menu/index.php">← Volver al catálogo</a>
         </div>
     </div>
 </section>
@@ -149,7 +149,7 @@ incluirTemplates('header');
             <?php if (isset($errores['imagen'])): ?><p class="error"><?= $errores['imagen'] ?></p><?php endif; ?>
             <img id="previewImagen" src="<?= BASE_URL . ltrim($rutaImagen, '/') ?>?t=<?= time() ?>" width="120" style="margin-top:5px;">
 
-            <input type="submit" value="Actualizar producto" class="admin-btn">
+            <input type="submit" value="Guardar cambios" class="admin-btn admin-btn-save-product">
         </form>
     </main>
 </section>

@@ -20,13 +20,18 @@
 }
 
 .admin-platos-title{
-    text-align:center;
-    font-size:46px;
+    font-size:clamp(32px,4vw,46px);
     font-weight:900;
-    margin-bottom:30px;
+    margin:4px 0 8px;
     color:#fff;
     text-shadow:0 0 16px rgba(255,255,255,.25);
 }
+
+.admin-platos-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:26px;}
+.admin-platos-heading p{max-width:620px;margin:0;color:#aeb8a9;font-size:15px;line-height:1.55;}
+.admin-platos-eyebrow{color:#00d084;font-size:12px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;}
+.admin-platos-total{flex:none;padding:9px 13px;border:1px solid rgba(0,208,132,.3);border-radius:999px;background:rgba(0,208,132,.1);color:#00d084;font-size:12px;font-weight:900;}
+.admin-platos-notice{margin:0 0 22px;padding:13px 16px;border:1px solid rgba(0,208,132,.32);border-radius:12px;background:rgba(0,208,132,.1);color:#9df4c9;font-weight:800;}
 
 .admin-platos-nav{
     display:flex;
@@ -49,6 +54,8 @@
     letter-spacing:1px;
     transition:.35s;
 }
+
+.admin-platos-btn-create span{font-size:21px;line-height:0;}
 
 .admin-platos-btn-create{
     background:#00d084;
@@ -136,8 +143,11 @@
 
 .admin-platos-status{
     text-align:center;
-    font-size:20px;
 }
+
+.admin-platos-status-pill{display:inline-flex;padding:6px 10px;border-radius:999px;font-size:11px;font-weight:900;white-space:nowrap;}
+.admin-platos-status-pill.is-active{background:rgba(0,208,132,.12);color:#6ceeb1;}
+.admin-platos-status-pill.is-inactive{background:rgba(255,255,255,.08);color:#bdbdbd;}
 
 .admin-platos-actions{
     display:flex;
@@ -168,6 +178,8 @@
     white-space:nowrap;
 }
 
+.admin-platos-btn-edit span,.admin-platos-btn-delete span{font-size:17px;line-height:1;}
+
 .admin-platos-btn-edit{
     background:#00d084;
     color:#000;
@@ -190,6 +202,19 @@
     transform:translateY(-3px);
     box-shadow:0 0 28px rgba(255,59,77,.85);
 }
+
+.admin-delete-dialog{width:min(92vw,430px);margin:auto;padding:0;border:1px solid rgba(255,59,77,.42);border-radius:20px;background:#151515;color:#fff;box-shadow:0 24px 80px rgba(0,0,0,.64);}
+.admin-delete-dialog::backdrop{background:rgba(0,0,0,.68);backdrop-filter:blur(4px);}
+.admin-delete-dialog form{padding:30px;text-align:center;}
+.admin-delete-dialog-icon{display:inline-grid;place-items:center;width:42px;height:42px;margin-bottom:14px;border-radius:50%;background:rgba(255,59,77,.16);color:#ff7280;font-size:23px;font-weight:900;}
+.admin-delete-dialog h2{margin:0 0 10px;font-size:25px;}
+.admin-delete-dialog p{margin:0;color:#c8c8c8;line-height:1.55;}
+.admin-delete-dialog p strong{color:#fff;}
+.admin-delete-dialog-actions{display:flex;gap:10px;justify-content:center;margin-top:25px;}
+.admin-dialog-cancel,.admin-dialog-confirm{min-height:43px;padding:0 16px;border-radius:999px;font:inherit;font-size:13px;font-weight:900;cursor:pointer;}
+.admin-dialog-cancel{border:1px solid rgba(255,255,255,.18);background:transparent;color:#fff;}
+.admin-dialog-confirm{border:1px solid #ff3b4d;background:#ff3b4d;color:#fff;}
+.admin-dialog-cancel:hover{background:rgba(255,255,255,.08);}.admin-dialog-confirm:hover{background:#ff5262;}
 
 .admin-platos-card .dataTables_wrapper{
     color:#fff;
@@ -338,6 +363,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr.parent > th.dtr-control::befor
     .admin-platos-nav{
         justify-content:center;
     }
+    .admin-platos-heading{align-items:flex-start;flex-direction:column;}
 }
 
 @media(max-width:700px){
@@ -427,4 +453,8 @@ table.dataTable.dtr-inline.collapsed > tbody > tr.parent > th.dtr-control::befor
         font-size:12px;
         letter-spacing:0;
     }
+
+    .admin-delete-dialog form{padding:25px 20px;}
+    .admin-delete-dialog-actions{flex-direction:column-reverse;}
+    .admin-dialog-cancel,.admin-dialog-confirm{width:100%;}
 }

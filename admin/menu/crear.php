@@ -78,8 +78,8 @@ incluirTemplates('header');
     <div>
         <h1>Crear producto</h1>
         <div class="botonesdeadmin">
-            <a href="<?php echo BASE_URL;?>admin/menu/index.php">tabla</a>
-            <a href="<?php echo BASE_URL;?>admin/index.php">atras</a>
+            <a href="<?php echo BASE_URL;?>admin/menu/index.php">Ver productos</a>
+            <a href="<?php echo BASE_URL;?>admin/index.php">Panel</a>
         </div>
     </div>
     <section class="admin-container admin-container-admin">
@@ -134,7 +134,7 @@ incluirTemplates('header');
                 <?php if (isset($errores['imagen'])): ?><p class="error"><?php echo $errores['imagen']; ?></p><?php endif; ?>
 
                 <img id="preview" style="max-width:200px; display:none;">
-                <input type="submit" value="Crear producto" class="admin-btn">
+                <input type="submit" value="Crear producto" class="admin-btn admin-btn-create-product">
             </form>
         </main>
     </section>

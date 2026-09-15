@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Francy Tamayo</title>
-<link rel="stylesheet" href="<?php echo BASE_URL;?>assets/css/app.css?v=11">
+<link rel="stylesheet" href="<?php echo BASE_URL;?>assets/css/app.css?v=13">
 
 <!-- jQuery  -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -28,7 +28,7 @@
 <div class="logo">Francy <span>Tamayo</span></div>
 
 <?php $paginaActual = basename($_SERVER['PHP_SELF']); ?>
-<nav>
+<nav class="main-nav" aria-label="Navegación principal">
 <a href="<?php echo BASE_URL;?>index.php" class="<?php echo $paginaActual === 'index.php' ? 'active' : ''; ?>">Inicio</a>
 <a href="<?php echo BASE_URL;?>pinturas.php" class="<?php echo $paginaActual === 'pinturas.php' ? 'active' : ''; ?>">Pinturas</a>
 <a href="<?php echo BASE_URL;?>retratos.php" class="<?php echo $paginaActual === 'retratos.php' ? 'active' : ''; ?>">Retratos</a>
@@ -40,29 +40,33 @@
 <?php if (!empty($_SESSION['login'])): ?>
 
 <!-- 🔐 Usuario logueado -->
-<a href="<?= BASE_URL; ?>admin/index.php" class="nav-user">👤 <?= $_SESSION['usuario']; ?></a>
+<div class="nav-session">
+<a href="<?= BASE_URL; ?>admin/index.php" class="nav-user" title="Panel de <?= htmlspecialchars($_SESSION['usuario']); ?>"><span class="nav-user-icon" aria-hidden="true">👤</span><span class="nav-user-name"><?= htmlspecialchars($_SESSION['usuario']); ?></span></a>
 
 <form class="nav-logout" method="POST" action="<?= BASE_URL; ?>admin/logout.php">
 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrfToken()) ?>">
 <button type="submit" class="btn-salir">Cerrar sesión</button>
 </form>
+</div>
 
 <?php else: ?>
 
 <!-- 🔓 Usuario no logueado -->
-<a href="<?= BASE_URL; ?>admin/login.php" class="btn-admin">
+<div class="nav-session"><a href="<?= BASE_URL; ?>admin/login.php" class="btn-admin">
 Iniciar sesión
-</a>
+</a></div>
 
 <?php endif; ?>
 
 </nav>
 
+<div class="nav-actions">
 <div class="nav-tools" aria-label="Herramientas de compra">
-<a href="<?php echo BASE_URL;?>buscador.php" class="nav-search <?php echo $paginaActual === 'buscador.php' ? 'active' : ''; ?>" aria-label="Buscar productos"><span>⌕</span> Buscar</a>
+<a href="<?php echo BASE_URL;?>buscador.php" class="nav-search <?php echo $paginaActual === 'buscador.php' ? 'active' : ''; ?>" aria-label="Buscar productos"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"></circle><path d="m16 16 4 4"></path></svg><span class="nav-search-label">Buscar</span></a>
 <a href="<?php echo BASE_URL;?>carrito.php" class="nav-cart <?php echo $paginaActual === 'carrito.php' ? 'active' : ''; ?>" aria-label="Ver carrito">♧<span class="cart-count" data-cart-count>0</span></a>
 </div>
 <a target="_blank" href="https://wa.me/573184597719" class="btn-nav">WhatsApp</a>
+</div>
 
 </div>
 

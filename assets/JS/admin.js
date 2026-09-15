@@ -1,34 +1,21 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const dialog = document.getElementById("delete-product-dialog");
+    const productId = document.getElementById("delete-product-id");
+    const productName = document.getElementById("delete-product-name");
 
-    const formularios = document.querySelectorAll(".form-eliminar");
+    if (!dialog || !productId || !productName) return;
 
-    formularios.forEach(form => {
-        form.addEventListener("submit", e => {
-            const confirmar = confirm("¿Seguro que deseas eliminar este producto?");
-            if (!confirmar) {
-                e.preventDefault();
-            }
+    document.querySelectorAll("[data-delete-product]").forEach((button) => {
+        button.addEventListener("click", () => {
+            productId.value = button.dataset.productId || "";
+            productName.textContent = button.dataset.productName || "este producto";
+            dialog.showModal();
         });
     });
 
-});
-
-
-//eliminar
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    const formularios = document.querySelectorAll(".form-eliminar");
-
-    formularios.forEach(form => {
-        form.addEventListener("submit", e => {
-            const confirmar = confirm("¿Seguro que deseas eliminar este producto?");
-            if (!confirmar) {
-                e.preventDefault();
-            }
-        });
+    document.querySelector("[data-delete-cancel]")?.addEventListener("click", () => dialog.close());
+    dialog.addEventListener("click", (event) => {
+        if (event.target === dialog) dialog.close();
     });
-
 });
-
 

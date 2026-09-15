@@ -53,6 +53,11 @@ incluirTemplates('header');
             </div>
 
             <div class="admin-action-grid">
+                <a href="<?= BASE_URL ?>admin/menu/index.php" class="admin-action-card admin-action-featured">
+                    <span>▦</span>
+                    <div><strong>Gestionar productos</strong><small>Agregar, editar o eliminar del catálogo</small></div>
+                    <b>→</b>
+                </a>
                 <?php foreach ($catalogo as $categoria): ?>
                     <a href="<?= $categoria['enlace'] ?>" class="admin-action-card">
                         <span><?= $categoria['icono'] ?></span>

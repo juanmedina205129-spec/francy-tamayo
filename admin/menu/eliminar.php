@@ -9,6 +9,11 @@ $db = conectarDB();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+    if (!csrfValido($_POST['csrf_token'] ?? null)) {
+        header('Location: index.php?error=seguridad');
+        exit;
+    }
+
     // 🔐 VALIDAR ID
     if (!isset($_POST['id'])) {
         header("Location: index.php");
