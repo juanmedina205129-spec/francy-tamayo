@@ -26,9 +26,9 @@ $mensaje = isset($_GET['ok']) ? 'Los cambios se guardaron correctamente.' : (iss
     <main class="admin-platos-card">
         <div class="admin-platos-heading">
             <div>
-                <span class="admin-platos-eyebrow">Catálogo</span>
+                <span class="admin-platos-eyebrow">Administración · Catálogo</span>
                 <h1 class="admin-platos-title">Gestiona tus productos</h1>
-                <p>Agrega nuevas piezas, actualiza la información o retira productos del catálogo.</p>
+                <p>Organiza las piezas que verán tus clientes: agrega, actualiza o retira productos del catálogo.</p>
             </div>
             <span class="admin-platos-total"><?= mysqli_num_rows($resultado); ?> productos</span>
         </div>
