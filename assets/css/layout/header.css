@@ -125,22 +125,29 @@ nav .btn-salir::after{
     display:inline-flex;
     align-items:center;
     justify-content:center;
-    width:38px;
+    min-width:38px;
     height:38px;
+    padding:0 13px;
     border:1px solid #e2d7c7;
-    border-radius:50%;
+    border-radius:999px;
     color:#2f4935;
-    font-size:23px;
+    font-size:14px;
     font-weight:900;
     position:relative;
+    gap:6px;
 }
 
 .nav-cart{
+    width:38px;
+    padding:0;
+    border-radius:50%;
     font-size:20px;
 }
 
 .nav-search:hover,
-.nav-cart:hover{
+.nav-search.active,
+.nav-cart:hover,
+.nav-cart.active{
     background:#edf3e8;
     border-color:#a9c5ab;
 }

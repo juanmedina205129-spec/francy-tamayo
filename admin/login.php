@@ -12,35 +12,14 @@ if (!empty($_SESSION['login'])) {
 $errores = [];
 
 function verificarUsuarioAdministrador(string $username, string $password): bool {
-    try {
-        $db = conectarDB();
-        $tablas = ['usuarios', 'usuarioss'];
+    $db = conectarDB();
+    $stmt = $db->prepare("SELECT username, password FROM usuarios WHERE username = ? LIMIT 1");
+    $stmt->bind_param('s', $username);
+    $stmt->execute();
+    $usuario = $stmt->get_result()->fetch_assoc();
+    $stmt->close();
 
-        foreach ($tablas as $tabla) {
-            $existe = $db->query("SHOW TABLES LIKE '{$tabla}'")->num_rows > 0;
-            if (!$existe) {
-                continue;
-            }
-
-            $stmt = $db->prepare("SELECT username, password FROM {$tabla} WHERE username = ? LIMIT 1");
-            $stmt->bind_param('s', $username);
-            $stmt->execute();
-            $usuario = $stmt->get_result()->fetch_assoc();
-            $stmt->close();
-
-            if ($usuario && password_verify($password, $usuario['password'])) {
-                return true;
-            }
-        }
-    } catch (Throwable $error) {
-        // El catálogo público no depende de la base anterior; se usa el acceso local configurable.
-    }
-
-    $usuarioLocal = getenv('ADMIN_USERNAME') ?: 'admin';
-    $hashLocal = getenv('ADMIN_PASSWORD_SHA256') ?: 'b6345f37a5110e4430af85039b02fb5422e7ab75e4cef33fa982a6505caefa97';
-
-    return hash_equals($usuarioLocal, $username)
-        && hash_equals($hashLocal, hash('sha256', $password));
+    return $usuario && password_verify($password, $usuario['password']);
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -52,7 +31,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errores[] = 'Completa usuario y contraseña.';
     }
 
-    if (empty($errores) && verificarUsuarioAdministrador($username, $password)) {
+    try {
+        $credencialesValidas = empty($errores) && verificarUsuarioAdministrador($username, $password);
+    } catch (Throwable $error) {
+        $credencialesValidas = false;
+        $errores[] = 'No se pudo conectar con la base de datos del administrador.';
+    }
+
+    if ($credencialesValidas) {
             session_regenerate_id(true);
             $_SESSION['login'] = true;
             $_SESSION['usuario'] = $username;

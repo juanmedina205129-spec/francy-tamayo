@@ -1,5 +1,8 @@
 <?php
 require 'include/funciones.php';
+require 'include/productos.php';
+
+$productos = obtenerProductos('pinturas');
 incluirTemplates('header');
 ?>
 
@@ -27,107 +30,15 @@ incluirTemplates('header');
                     <button class="filter">Agotado</button>
                 </div>
                 <div class="store-count">
-                    <span>6 productos</span>
+                    <span><?= count($productos) ?> productos</span>
                     <strong>Destacados</strong>
                 </div>
             </div>
 
             <div class="product-grid category-products">
-                <article class="product-card">
-                    <div class="product-image">
-                        <span class="badge available">Disponible</span>
-                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/cuadro-golondrina.png" alt="Retrato de golden retriever">
-                    </div>
-                    <div class="product-body">
-                        <span>Pintura al oleo</span>
-                        <h3>Retrato Golden Retriever</h3>
-                        <p class="rating">★★★★☆ 4.9</p>
-                        <div class="product-footer">
-                            <strong>$280.000</strong>
-                            <button class="add-to-cart" data-product="Retrato Golden Retriever" data-category="Pintura al óleo" data-price="280000" data-image="assets/imagenes/productos/cuadro-golondrina.png">Añadir</button>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="product-card">
-                    <div class="product-image">
-                        <span class="badge available">Disponible</span>
-                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/cuadro-jilguero.png" alt="Perro en acuarela">
-                    </div>
-                    <div class="product-body">
-                        <span>Acuarela</span>
-                        <h3>Perro en acuarela</h3>
-                        <p class="rating">★★★★☆ 4.8</p>
-                        <div class="product-footer">
-                            <strong>$195.000</strong>
-                            <button class="add-to-cart" data-product="Perro en acuarela" data-category="Acuarela" data-price="195000" data-image="assets/imagenes/productos/cuadro-jilguero.png">Añadir</button>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="product-card">
-                    <div class="product-image">
-                        <span class="badge custom">Agotado</span>
-                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/cuadro-plumas.png" alt="Dos gatitos al óleo">
-                    </div>
-                    <div class="product-body">
-                        <span>Pintura al oleo</span>
-                        <h3>Dos gatitos - oleo</h3>
-                        <p class="rating">★★★★☆ 4.9</p>
-                        <div class="product-footer">
-                            <strong>$340.000</strong>
-                            <button class="add-to-cart" data-product="Dos gatitos - óleo" data-category="Pintura al óleo" data-price="340000" data-image="assets/imagenes/productos/cuadro-plumas.png" disabled>Agotado</button>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="product-card">
-                    <div class="product-image">
-                        <span class="badge available">Disponible</span>
-                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/cuadro-buho.png" alt="Ave colorida en acuarela">
-                    </div>
-                    <div class="product-body">
-                        <span>Acuarela</span>
-                        <h3>Ave colorida - acuarela</h3>
-                        <p class="rating">★★★★☆ 4.8</p>
-                        <div class="product-footer">
-                            <strong>$175.000</strong>
-                            <button class="add-to-cart" data-product="Ave colorida - acuarela" data-category="Acuarela" data-price="175000" data-image="assets/imagenes/productos/cuadro-buho.png">Añadir</button>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="product-card">
-                    <div class="product-image">
-                        <span class="badge available">Disponible</span>
-                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/estuche-golondrina.png" alt="Martín pescador en acuarela">
-                    </div>
-                    <div class="product-body">
-                        <span>Acuarela</span>
-                        <h3>Martin pescador</h3>
-                        <p class="rating">★★★★☆ 4.7</p>
-                        <div class="product-footer">
-                            <strong>$160.000</strong>
-                            <button class="add-to-cart" data-product="Martín pescador" data-category="Acuarela" data-price="160000" data-image="assets/imagenes/productos/estuche-golondrina.png">Añadir</button>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="product-card">
-                    <div class="product-image">
-                        <span class="badge available">Disponible</span>
-                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/estuche-plumas.png" alt="Perro blanco al óleo">
-                    </div>
-                    <div class="product-body">
-                        <span>Pintura al oleo</span>
-                        <h3>Perro blanco - oleo</h3>
-                        <p class="rating">★★★★☆ 4.8</p>
-                        <div class="product-footer">
-                            <strong>$260.000</strong>
-                            <button class="add-to-cart" data-product="Perro blanco - óleo" data-category="Pintura al óleo" data-price="260000" data-image="assets/imagenes/productos/estuche-plumas.png">Añadir</button>
-                        </div>
-                    </div>
-                </article>
+                <?php foreach ($productos as $producto): ?>
+                    <?php renderizarTarjetaProducto($producto); ?>
+                <?php endforeach; ?>
             </div>
         </div>
     </section>

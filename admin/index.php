@@ -1,11 +1,13 @@
 <?php
 require_once __DIR__ . '/../include/funciones.php';
+require_once __DIR__ . '/../include/productos.php';
 auth();
 
+$conteo = contarProductosPorCategoria();
 $catalogo = [
-    ['nombre' => 'Pinturas', 'cantidad' => 6, 'detalle' => 'Obras disponibles en el catálogo', 'enlace' => BASE_URL . 'pinturas.php', 'icono' => '✦'],
-    ['nombre' => 'Retratos', 'cantidad' => 3, 'detalle' => 'Encargos de mascotas y animales', 'enlace' => BASE_URL . 'retratos.php', 'icono' => '♡'],
-    ['nombre' => 'Camisetas', 'cantidad' => 4, 'detalle' => 'Diseños listos para personalizar', 'enlace' => BASE_URL . 'camisetas.php', 'icono' => '◌'],
+    ['nombre' => 'Pinturas', 'cantidad' => $conteo['pinturas'], 'detalle' => 'Obras disponibles en el catalogo', 'enlace' => BASE_URL . 'pinturas.php', 'icono' => '✦'],
+    ['nombre' => 'Retratos', 'cantidad' => $conteo['retratos'], 'detalle' => 'Encargos de mascotas y animales', 'enlace' => BASE_URL . 'retratos.php', 'icono' => '♡'],
+    ['nombre' => 'Camisetas', 'cantidad' => $conteo['camisetas'], 'detalle' => 'Diseños listos para personalizar', 'enlace' => BASE_URL . 'camisetas.php', 'icono' => '◌'],
 ];
 
 $totalProductos = array_sum(array_column($catalogo, 'cantidad'));

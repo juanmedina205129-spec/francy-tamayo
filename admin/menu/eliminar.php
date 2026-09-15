@@ -22,18 +22,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // obtener imagen para eliminar archivo físico
-    $stmt = $db->prepare("SELECT imagen FROM plato WHERE id = ?");
+    // obtener imagen para eliminar archivo fisico
+    $stmt = $db->prepare("SELECT imagen FROM productos WHERE id = ?");
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $resultado = $stmt->get_result();
-    $plato = $resultado->fetch_assoc();
+    $producto = $resultado->fetch_assoc();
 
-    if ($plato) {
+    if ($producto) {
 
         // ELIMINAR IMAGEN DEL SERVIDOR 
-        if (!empty($plato['imagen'])) {
-            $rutaImagen = $_SERVER['DOCUMENT_ROOT'] . '/restauranteSabados/' . $plato['imagen'];
+        if (!empty($producto['imagen'])) {
+            $rutaImagen = $_SERVER['DOCUMENT_ROOT'] . '/francytamayo/' . $producto['imagen'];
 
             if (file_exists($rutaImagen)) {
                 unlink($rutaImagen);
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         // ELIMINAR DE LA BASE DE DATOS
-        $stmt = $db->prepare("DELETE FROM plato WHERE id = ?");
+        $stmt = $db->prepare("DELETE FROM productos WHERE id = ?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
     }

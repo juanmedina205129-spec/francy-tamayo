@@ -1,7 +1,9 @@
 
 <?php
-require __DIR__ . '/include/config/database.php';
 require __DIR__ . '/include/funciones.php';
+require __DIR__ . '/include/productos.php';
+
+$productosDestacados = obtenerProductosDestacados(3);
 
 incluirTemplates('header');
 ?>
@@ -89,53 +91,9 @@ incluirTemplates('header');
             </div>
 
             <div class="product-grid">
-                <article class="product-card" id="producto-pinturas">
-                    <div class="product-image">
-                        <span class="badge available">Disponible</span>
-                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/cuadro-jilguero.png" alt="Pintura al oleo de jilguero">
-                    </div>
-                    <div class="product-body">
-                        <span>Pintura al oleo</span>
-                        <h3>Retrato Colibri Multicolor</h3>
-                        <p class="rating">★★★★★ 4.9</p>
-                        <div class="product-footer">
-                            <strong>$250.000</strong>
-                            <a href="<?php echo BASE_URL; ?>pinturas.php">Ver mas</a>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="product-card" id="producto-retratos">
-                    <div class="product-image">
-                        <span class="badge custom">Por encargo</span>
-                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/cuadro-buho.png" alt="Retrato artistico de buho">
-                    </div>
-                    <div class="product-body">
-                        <span>Por encargo</span>
-                        <h3>Retrato mascota personalizado</h3>
-                        <p class="rating">★★★★★ 5.0</p>
-                        <div class="product-footer">
-                            <strong>Desde $220.000</strong>
-                            <a href="<?php echo BASE_URL; ?>retratos.php">Ver mas</a>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="product-card" id="producto-camisetas">
-                    <div class="product-image">
-                        <span class="badge available">Disponible</span>
-                        <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/estuche-plumas.png" alt="Producto artistico con plumas">
-                    </div>
-                    <div class="product-body">
-                        <span>Camiseta</span>
-                        <h3>Camiseta fauna colorida</h3>
-                        <p class="rating">★★★★★ 4.7</p>
-                        <div class="product-footer">
-                            <strong>$85.000</strong>
-                            <a href="<?php echo BASE_URL; ?>camisetas.php">Ver mas</a>
-                        </div>
-                    </div>
-                </article>
+                <?php foreach ($productosDestacados as $producto): ?>
+                    <?php renderizarTarjetaProducto($producto, true); ?>
+                <?php endforeach; ?>
             </div>
         </div>
     </section>

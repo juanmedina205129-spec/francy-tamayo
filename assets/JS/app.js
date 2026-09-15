@@ -2,7 +2,7 @@
     const cartKey = 'francy-tamayo-cart';
     const customerDataKey = 'francy-tamayo-customer-data';
     const money = value => new Intl.NumberFormat('es-CO', {style: 'currency', currency: 'COP', maximumFractionDigits: 0}).format(value);
-    const catalog = [
+    const defaultCatalog = [
         ['Retrato Golden Retriever', 'Pintura al óleo', 280000, 'assets/imagenes/productos/cuadro-golondrina.png'], ['Perro en acuarela', 'Acuarela', 195000, 'assets/imagenes/productos/cuadro-jilguero.png'],
         ['Ave colorida - acuarela', 'Acuarela', 175000, 'assets/imagenes/productos/cuadro-buho.png'], ['Martín pescador', 'Acuarela', 160000, 'assets/imagenes/productos/estuche-golondrina.png'],
         ['Perro blanco - óleo', 'Pintura al óleo', 260000, 'assets/imagenes/productos/estuche-plumas.png'], ['Retrato mascota personalizado', 'Retrato de mascotas', 220000, 'assets/imagenes/productos/cuadro-buho.png'],
@@ -10,6 +10,7 @@
         ['Camiseta Perro Acuarela', 'Camiseta', 85000, 'assets/imagenes/productos/estuche-azulejo.png'], ['Camiseta Gato Minimalista', 'Camiseta', 75000, 'assets/imagenes/productos/estuche-plumas.png'],
         ['Camiseta Tigre Estampado', 'Camiseta', 90000, 'assets/imagenes/productos/estuche-golondrina.png'], ['Camiseta Mascota Personalizada', 'Camisetas personalizadas', 110000, 'assets/imagenes/productos/estuche-buho.png']
     ].map(([name, category, price, image]) => ({name, category, price, image}));
+    const catalog = Array.isArray(window.FRANCY_PRODUCTS) && window.FRANCY_PRODUCTS.length ? window.FRANCY_PRODUCTS : defaultCatalog;
 
     const getCart = () => { try { return JSON.parse(localStorage.getItem(cartKey)) || []; } catch { return []; } };
     const saveCart = cart => { localStorage.setItem(cartKey, JSON.stringify(cart)); updateCount(); };
@@ -42,6 +43,7 @@
         const input = document.querySelector('#product-search');
         searchForm.addEventListener('submit', event => { event.preventDefault(); renderSearch(input.value); });
         document.querySelectorAll('[data-search-term]').forEach(button => button.addEventListener('click', () => { input.value = button.dataset.searchTerm; renderSearch(input.value); }));
+        if (input.value.trim()) renderSearch(input.value);
     }
 
     const renderCart = () => {

@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     formularios.forEach(form => {
         form.addEventListener("submit", e => {
-            const confirmar = confirm("¿Seguro que deseas eliminar este plato?");
+            const confirmar = confirm("¿Seguro que deseas eliminar este producto?");
             if (!confirmar) {
                 e.preventDefault();
             }
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     formularios.forEach(form => {
         form.addEventListener("submit", e => {
-            const confirmar = confirm("¿Seguro que deseas eliminar este plato?");
+            const confirmar = confirm("¿Seguro que deseas eliminar este producto?");
             if (!confirmar) {
                 e.preventDefault();
             }

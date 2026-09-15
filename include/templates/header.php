@@ -59,8 +59,8 @@ Iniciar sesión
 </nav>
 
 <div class="nav-tools" aria-label="Herramientas de compra">
-<a href="<?php echo BASE_URL;?>buscador.php" class="nav-search" aria-label="Buscar productos">⌕</a>
-<a href="<?php echo BASE_URL;?>carrito.php" class="nav-cart" aria-label="Ver carrito">♧<span class="cart-count" data-cart-count>0</span></a>
+<a href="<?php echo BASE_URL;?>buscador.php" class="nav-search <?php echo $paginaActual === 'buscador.php' ? 'active' : ''; ?>" aria-label="Buscar productos"><span>⌕</span> Buscar</a>
+<a href="<?php echo BASE_URL;?>carrito.php" class="nav-cart <?php echo $paginaActual === 'carrito.php' ? 'active' : ''; ?>" aria-label="Ver carrito">♧<span class="cart-count" data-cart-count>0</span></a>
 </div>
 <a target="_blank" href="https://wa.me/573184597719" class="btn-nav">WhatsApp</a>
 
