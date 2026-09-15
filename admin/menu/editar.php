@@ -92,18 +92,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 incluirTemplates('header');
 ?>
 
-<section class="container container_admin3">
-    <div>
-        <h1>Editar producto</h1>
+<section class="container container_admin3 admin-product-page">
+    <div class="admin-product-page-header">
+        <div>
+            <span class="admin-product-eyebrow">Administración · Catálogo</span>
+            <h1>Editar producto</h1>
+            <p>Actualiza los detalles de <strong><?= htmlspecialchars($nombre) ?></strong> y guarda los cambios cuando estén listos.</p>
+        </div>
         <div class="botondeadmin3">
             <a href="<?php echo BASE_URL;?>admin/menu/index.php">← Volver al catálogo</a>
         </div>
     </div>
 </section>
 
-<section class="admin-container admin-container-admin">
+<section class="admin-container admin-container-admin admin-product-form-area">
     <main class="admin-card">
-        <h1>Editar producto</h1>
+        <span class="admin-card-eyebrow">Edición</span>
+        <h1>Información del producto</h1>
+        <p class="admin-card-intro">Modifica solo lo necesario. Puedes conservar la imagen actual o cargar una nueva.</p>
 
         <form method="POST" enctype="multipart/form-data" class="admin-form">
             <label>Nombre</label>

@@ -222,3 +222,29 @@
     .admin-btn{width:100%;}
     #previewImagen{width:120px; height:120px;}
 }
+
+/* Formularios de producto alineados con el panel administrativo */
+.container_admin.admin-product-page,.container_admin3.admin-product-page{position:relative;z-index:1;max-width:1120px;padding-top:142px;padding-bottom:0;}
+.admin-product-page-header{display:flex;align-items:flex-end;justify-content:space-between;gap:28px;padding:0 18px 30px;border-bottom:1px solid rgba(235,222,195,.16);}
+.container_admin > .admin-product-page-header h1,.container_admin3 .admin-product-page-header h1{margin:5px 0 10px;color:#fff8ea;font-size:clamp(34px,4vw,46px);letter-spacing:-.8px;text-align:left;text-shadow:none;animation:none;}
+.admin-product-eyebrow,.admin-card-eyebrow{display:block;color:#e9ae54;font-size:12px;font-weight:900;letter-spacing:1.6px;text-transform:uppercase;}
+.admin-product-page-header p{max-width:640px;margin:0;color:#bbc2b5;line-height:1.6;}.admin-product-page-header p strong{color:#fff8ea;}
+.botonesdeadmin,.botondeadmin3{margin:0;justify-content:flex-end;}
+.botonesdeadmin a,.botondeadmin3 a{min-width:0;padding:11px 17px;border:1px solid rgba(235,222,195,.24);border-radius:999px;background:rgba(255,250,240,.06)!important;color:#fff8ea!important;box-shadow:none!important;font-size:14px;font-weight:900;letter-spacing:0;text-transform:none;}
+.botonesdeadmin a:first-child{border-color:rgba(233,174,84,.55);color:#e9ae54!important;}.botonesdeadmin a:hover,.botondeadmin3 a:hover{transform:translateY(-2px) scale(1);border-color:#e9ae54;background:rgba(255,250,240,.11)!important;color:#e9ae54!important;}
+.admin-container-admin.admin-product-form-area{min-height:0;padding:30px 20px 90px;align-items:flex-start;}
+.admin-product-form-area .admin-card{max-width:820px;padding:34px;background:linear-gradient(145deg,rgba(34,52,41,.96),rgba(20,33,25,.98));border-color:rgba(235,222,195,.16);box-shadow:0 18px 38px rgba(0,0,0,.28),inset 0 1px rgba(255,248,234,.05);}
+.admin-product-form-area .admin-card h1{margin:5px 0 8px;color:#fff8ea;font-size:30px;text-align:left;text-shadow:none;}
+.admin-card-intro{margin:0 0 28px;color:#bbc2b5;font-size:14px;line-height:1.6;}
+.admin-product-form-area .admin-form{gap:10px;}.admin-product-form-area .admin-form label{margin-top:10px;color:#dce5d7;font-size:13px;letter-spacing:.15px;}
+.admin-product-form-area .admin-form input,.admin-product-form-area .admin-form textarea,.admin-product-form-area .admin-form select{border-color:rgba(235,222,195,.17);background:rgba(7,16,11,.52);color:#fff8ea;}
+.admin-product-form-area .admin-form input:hover,.admin-product-form-area .admin-form textarea:hover,.admin-product-form-area .admin-form select:hover{border-color:rgba(233,174,84,.45);}
+.admin-product-form-area .admin-form input:focus,.admin-product-form-area .admin-form textarea:focus,.admin-product-form-area .admin-form select:focus{border-color:#e9ae54;box-shadow:0 0 0 3px rgba(233,174,84,.13);}
+.admin-product-form-area .admin-form select{width:100%;padding:14px 16px;border-radius:14px;outline:none;font:inherit;cursor:pointer;}
+.admin-product-form-area .admin-form label:has(input[type="checkbox"]){margin:3px 0 0;padding:11px 13px;border:1px solid rgba(235,222,195,.12);border-radius:10px;background:rgba(7,16,11,.25);}
+.admin-product-form-area .admin-form input[type="checkbox"]{accent-color:#e9ae54;}
+.admin-product-form-area .admin-form input[type="file"]::file-selector-button{background:#e9ae54;color:#1a2b20;box-shadow:none;}.admin-product-form-area .admin-form input[type="file"]::file-selector-button:hover{background:#f2bd5d;box-shadow:none;}
+.admin-product-form-area .admin-btn,.admin-product-form-area .admin-btn-create-product,.admin-product-form-area .admin-btn-save-product{margin-top:18px;background:#e9ae54;color:#1a2b20;box-shadow:none;}.admin-product-form-area .admin-btn:hover,.admin-product-form-area .admin-btn-create-product:hover,.admin-product-form-area .admin-btn-save-product:hover{background:#f2bd5d;box-shadow:0 10px 22px rgba(233,174,84,.2);transform:translateY(-2px);}
+.admin-product-form-area #previewImagen,.admin-product-form-area .admin-preview{border-color:rgba(233,174,84,.34);box-shadow:0 10px 22px rgba(0,0,0,.25);background:#142119;}
+.admin-product-form-area .mensajeOk{border-color:rgba(111,176,125,.4);background:rgba(68,116,81,.22);color:#d6e8d1;box-shadow:none;}
+@media(max-width:700px){.container_admin.admin-product-page,.container_admin3.admin-product-page{padding-top:116px;}.admin-product-page-header{align-items:flex-start;flex-direction:column;padding:0 0 24px;}.botonesdeadmin,.botondeadmin3{width:100%;justify-content:flex-start;}.botonesdeadmin a,.botondeadmin3 a{width:auto;max-width:none;}.admin-container-admin.admin-product-form-area{padding:24px 14px 64px;}.admin-product-form-area .admin-card{padding:24px 20px;}}

@@ -74,17 +74,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 incluirTemplates('header');
 ?>
 
-<section class="container container_admin">
-    <div>
-        <h1>Crear producto</h1>
+<section class="container container_admin admin-product-page">
+    <div class="admin-product-page-header">
+        <div>
+            <span class="admin-product-eyebrow">Administración · Catálogo</span>
+            <h1>Agregar producto</h1>
+            <p>Completa la información para publicar una nueva pieza en el catálogo.</p>
+        </div>
         <div class="botonesdeadmin">
-            <a href="<?php echo BASE_URL;?>admin/menu/index.php">Ver productos</a>
+            <a href="<?php echo BASE_URL;?>admin/menu/index.php">← Volver al catálogo</a>
             <a href="<?php echo BASE_URL;?>admin/index.php">Panel</a>
         </div>
     </div>
-    <section class="admin-container admin-container-admin">
+</section>
+    <section class="admin-container admin-container-admin admin-product-form-area">
         <main class="admin-card">
-            <h1>Nuevo producto</h1>
+            <span class="admin-card-eyebrow">Nueva pieza</span>
+            <h1>Información del producto</h1>
+            <p class="admin-card-intro">Los campos con información precisa ayudan a que tus clientes encuentren y entiendan mejor cada producto.</p>
 
             <?php if ($mensaje): ?>
                 <p id="mensajeOk" class="mensajeOk"><?php echo htmlspecialchars($mensaje); ?></p>
@@ -138,6 +145,5 @@ incluirTemplates('header');
             </form>
         </main>
     </section>
-</section>
 
 <?php include '../../include/templates/footer.php'; ?>
