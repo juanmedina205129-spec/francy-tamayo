@@ -17,7 +17,7 @@ incluirTemplates('header');
 // CONSULTA
 $query = "SELECT * FROM productos ORDER BY orden ASC, id ASC";
 $resultado = mysqli_query($db, $query);
-$mensaje = isset($_GET['ok']) ? 'Los cambios se guardaron correctamente.' : (isset($_GET['eliminado']) ? 'El producto se eliminó correctamente.' : '');
+$mensaje = isset($_GET['ok']) ? 'El producto se ' . ($_GET['ok'] === 'creado' ? 'creó' : 'actualizó') . ' correctamente.' : (isset($_GET['eliminado']) ? 'El producto se eliminó correctamente.' : '');
 
 ?>
 
@@ -79,7 +79,7 @@ $mensaje = isset($_GET['ok']) ? 'Los cambios se guardaron correctamente.' : (iss
                         </td>
 
                         <td class="admin-platos-actions">
-                            <a href="editar.php?id=<?= $producto['id']; ?>" class="admin-platos-btn-edit"><span aria-hidden="true">✎</span> Editar</a>
+                            <a href="<?= BASE_URL ?>admin/menu/editar.php?id=<?= $producto['id']; ?>" class="admin-platos-btn-edit"><span aria-hidden="true">✎</span> Editar</a>
                             <button type="button" class="admin-platos-btn-delete" data-delete-product data-product-id="<?= $producto['id']; ?>" data-product-name="<?= htmlspecialchars($producto['nombre'], ENT_QUOTES); ?>"><span aria-hidden="true">×</span> Eliminar</button>
                         </td>
                     </tr>

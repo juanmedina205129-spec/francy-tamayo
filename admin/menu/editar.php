@@ -3,6 +3,7 @@ require_once __DIR__ . '/../../include/funciones.php';
 auth();
 
 require_once __DIR__ . '/../../include/config/database.php';
+require_once __DIR__ . '/../../include/producto_admin.php';
 $db = conectarDB();
 
 $scripts = ['editar'];
@@ -37,6 +38,9 @@ $activo = (int) $producto['activo'];
 $rutaImagen = $producto['imagen'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!csrfValido($_POST['csrf_token'] ?? null)) {
+        $errores['general'] = 'La sesión expiró. Recarga la página e inténtalo de nuevo.';
+    }
     $nombre = trim($_POST['nombre'] ?? '');
     $descripcion = trim($_POST['descripcion'] ?? '');
     $precio = (float) ($_POST['precio'] ?? 0);
@@ -56,36 +60,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($precio <= 0) $errores['precio'] = 'Precio invalido';
     if ($rating < 0 || $rating > 5) $errores['rating'] = 'La valoracion debe estar entre 0 y 5';
 
+    $imagenAnterior = $rutaImagen;
     if ($imagen && !empty($imagen['tmp_name'])) {
-        $carpeta = $_SERVER['DOCUMENT_ROOT'] . '/francytamayo/assets/imagenes/productos/';
-        if (!is_dir($carpeta)) mkdir($carpeta, 0755, true);
-
-        $extension = strtolower(pathinfo($imagen['name'], PATHINFO_EXTENSION));
-        $permitidos = ['jpg', 'jpeg', 'png', 'webp', 'avif'];
-
-        if (!in_array($extension, $permitidos, true)) {
-            $errores['imagen'] = 'Formato no valido';
-        } elseif ($imagen['size'] > 2500000) {
-            $errores['imagen'] = 'Maximo 2.5MB';
+        [$nuevaRuta, $errorImagen] = guardarImagenProducto($imagen);
+        if ($errorImagen) {
+            $errores['imagen'] = $errorImagen;
         } else {
-            $nombreImagen = md5(uniqid((string) rand(), true)) . '.' . $extension;
-            $ruta = $carpeta . $nombreImagen;
-
-            if (move_uploaded_file($imagen['tmp_name'], $ruta)) {
-                $rutaImagen = 'assets/imagenes/productos/' . $nombreImagen;
-            } else {
-                $errores['imagen'] = 'No se pudo subir la imagen';
-            }
+            $rutaImagen = $nuevaRuta;
         }
     }
 
     if (empty($errores)) {
-        $stmt = $db->prepare('UPDATE productos SET nombre=?, categoria=?, tipo=?, descripcion=?, precio=?, imagen=?, estado=?, rating=?, destacado=?, activo=?, orden=? WHERE id=?');
-        $stmt->bind_param('ssssdssdiiii', $nombre, $categoria, $tipo, $descripcion, $precio, $rutaImagen, $estado, $rating, $destacado, $activo, $orden, $id);
-        $stmt->execute();
+        try {
+            $stmt = $db->prepare('UPDATE productos SET nombre=?, categoria=?, tipo=?, descripcion=?, precio=?, imagen=?, estado=?, rating=?, destacado=?, activo=?, orden=? WHERE id=?');
+            $stmt->bind_param('ssssdssdiiii', $nombre, $categoria, $tipo, $descripcion, $precio, $rutaImagen, $estado, $rating, $destacado, $activo, $orden, $id);
+            $stmt->execute();
+            if ($rutaImagen !== $imagenAnterior) eliminarImagenProductoSubida($imagenAnterior);
 
-        header('Location: index.php?ok=1');
-        exit;
+            header('Location: index.php?ok=editado');
+            exit;
+        } catch (mysqli_sql_exception $error) {
+            if ($rutaImagen !== $imagenAnterior) eliminarImagenProductoSubida($rutaImagen);
+            $rutaImagen = $imagenAnterior;
+            $errores['general'] = $error->getCode() === 1062 ? 'Ya existe un producto con ese nombre.' : 'No se pudo actualizar el producto en la base de datos.';
+        }
     }
 }
 
@@ -110,8 +108,10 @@ incluirTemplates('header');
         <span class="admin-card-eyebrow">Edición</span>
         <h1>Información del producto</h1>
         <p class="admin-card-intro">Modifica solo lo necesario. Puedes conservar la imagen actual o cargar una nueva.</p>
+        <?php if (isset($errores['general'])): ?><p class="error" role="alert"><?= htmlspecialchars($errores['general']) ?></p><?php endif; ?>
 
         <form method="POST" enctype="multipart/form-data" class="admin-form">
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrfToken()) ?>">
             <label>Nombre</label>
             <input type="text" name="nombre" value="<?= htmlspecialchars($nombre) ?>">
             <?php if (isset($errores['nombre'])): ?><p class="error"><?= $errores['nombre'] ?></p><?php endif; ?>

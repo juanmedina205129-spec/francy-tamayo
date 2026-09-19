@@ -3,6 +3,7 @@ require_once __DIR__ . '/../../include/funciones.php';
 auth();
 
 require_once __DIR__ . '/../../include/config/database.php';
+require_once __DIR__ . '/../../include/producto_admin.php';
 $db = conectarDB();
 
 $scripts = ['crear'];
@@ -21,6 +22,9 @@ $destacado = 0;
 $activo = 1;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!csrfValido($_POST['csrf_token'] ?? null)) {
+        $errores['general'] = 'La sesión expiró. Recarga la página e inténtalo de nuevo.';
+    }
     $nombre = trim($_POST['nombre'] ?? '');
     $descripcion = trim($_POST['descripcion'] ?? '');
     $precio = (float) ($_POST['precio'] ?? 0);
@@ -42,31 +46,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$imagen || empty($imagen['tmp_name'])) $errores['imagen'] = 'La imagen es obligatoria';
 
     if (empty($errores)) {
-        $carpeta = $_SERVER['DOCUMENT_ROOT'] . '/francytamayo/assets/imagenes/productos/';
-        if (!is_dir($carpeta)) mkdir($carpeta, 0755, true);
-
-        $extension = strtolower(pathinfo($imagen['name'], PATHINFO_EXTENSION));
-        $permitidos = ['jpg', 'jpeg', 'png', 'webp', 'avif'];
-
-        if (!in_array($extension, $permitidos, true)) {
-            $errores['imagen'] = 'Formato no valido';
-        } elseif ($imagen['size'] > 2500000) {
-            $errores['imagen'] = 'Maximo 2.5MB';
+        [$rutaDB, $errorImagen] = guardarImagenProducto($imagen);
+        if ($errorImagen) {
+            $errores['imagen'] = $errorImagen;
         } else {
-            $nombreImagen = md5(uniqid((string) rand(), true)) . '.' . $extension;
-            $ruta = $carpeta . $nombreImagen;
-
-            if (move_uploaded_file($imagen['tmp_name'], $ruta)) {
-                $rutaDB = 'assets/imagenes/productos/' . $nombreImagen;
+            try {
                 $stmt = $db->prepare('INSERT INTO productos (nombre, categoria, tipo, descripcion, precio, imagen, estado, rating, destacado, activo, orden) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
                 $stmt->bind_param('ssssdssdiii', $nombre, $categoria, $tipo, $descripcion, $precio, $rutaDB, $estado, $rating, $destacado, $activo, $orden);
                 $stmt->execute();
 
-                header('Location: crear.php?ok=1');
+                header('Location: index.php?ok=creado');
                 exit;
+            } catch (mysqli_sql_exception $error) {
+                eliminarImagenProductoSubida($rutaDB);
+                $errores['general'] = $error->getCode() === 1062 ? 'Ya existe un producto con ese nombre.' : 'No se pudo guardar el producto en la base de datos.';
             }
-
-            $errores['imagen'] = 'No se pudo subir la imagen';
         }
     }
 }
@@ -96,8 +90,10 @@ incluirTemplates('header');
             <?php if ($mensaje): ?>
                 <p id="mensajeOk" class="mensajeOk"><?php echo htmlspecialchars($mensaje); ?></p>
             <?php endif; ?>
+            <?php if (isset($errores['general'])): ?><p class="error" role="alert"><?php echo htmlspecialchars($errores['general']); ?></p><?php endif; ?>
 
             <form class="admin-form" method="POST" enctype="multipart/form-data" novalidate>
+                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrfToken()) ?>">
                 <label>Nombre</label>
                 <input type="text" name="nombre" value="<?php echo htmlspecialchars($nombre); ?>">
                 <?php if (isset($errores['nombre'])): ?><p class="error"><?php echo $errores['nombre']; ?></p><?php endif; ?>

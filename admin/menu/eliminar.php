@@ -4,6 +4,7 @@ require_once __DIR__ . '/../../include/funciones.php';
 auth();
 
 require_once __DIR__ . '/../../include/config/database.php';
+require_once __DIR__ . '/../../include/producto_admin.php';
 $db = conectarDB();
 
 
@@ -36,19 +37,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($producto) {
 
-        // ELIMINAR IMAGEN DEL SERVIDOR 
-        if (!empty($producto['imagen'])) {
-            $rutaImagen = $_SERVER['DOCUMENT_ROOT'] . '/francytamayo/' . $producto['imagen'];
-
-            if (file_exists($rutaImagen)) {
-                unlink($rutaImagen);
-            }
-        }
-
         // ELIMINAR DE LA BASE DE DATOS
         $stmt = $db->prepare("DELETE FROM productos WHERE id = ?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
+        eliminarImagenProductoSubida($producto['imagen']);
     }
 
     // REDIRECCIÓN
