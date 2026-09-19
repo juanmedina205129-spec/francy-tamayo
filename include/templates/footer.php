@@ -34,11 +34,12 @@
 
 </footer>
 
-<script src="<?php echo BASE_URL; ?>assets/JS/app.js"></script>
+<script src="<?php echo BASE_URL; ?>assets/JS/app.js?v=<?php echo filemtime(__DIR__ . '/../../assets/JS/app.js'); ?>"></script>
 
 <?php if(isset($scripts) && is_array($scripts)): ?>
     <?php foreach($scripts as $script): ?>
-        <script src="<?php echo BASE_URL. "assets/JS/$script.js"; ?>"></script>
+        <?php $rutaScript = __DIR__ . "/../../assets/JS/$script.js"; ?>
+        <script src="<?php echo BASE_URL . "assets/JS/$script.js"; ?>?v=<?php echo is_file($rutaScript) ? filemtime($rutaScript) : time(); ?>"></script>
     <?php endforeach; ?>
 <?php endif; ?>
 

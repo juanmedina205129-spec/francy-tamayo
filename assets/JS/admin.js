@@ -5,12 +5,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!dialog || !productId || !productName) return;
 
-    document.querySelectorAll("[data-delete-product]").forEach((button) => {
-        button.addEventListener("click", () => {
-            productId.value = button.dataset.productId || "";
-            productName.textContent = button.dataset.productName || "este producto";
-            dialog.showModal();
-        });
+    document.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-delete-product]");
+        if (!button) return;
+        productId.value = button.dataset.productId || "";
+        productName.textContent = button.dataset.productName || "este producto";
+        dialog.showModal();
     });
 
     document.querySelector("[data-delete-cancel]")?.addEventListener("click", () => dialog.close());
