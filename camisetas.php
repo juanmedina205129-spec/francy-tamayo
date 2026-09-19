@@ -9,6 +9,10 @@ $productos = obtenerProductos('camisetas', true, $estadoFiltro ?: null);
 incluirTemplates('header');
 ?>
 
+/* 
+    Plantilla para la pagina de categoria de camisetas
+*/
+
 <main class="category-page category-shirts">
     <section class="category-hero">
         <div class="container category-hero-content">
