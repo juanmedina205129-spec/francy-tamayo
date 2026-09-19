@@ -87,12 +87,29 @@
         customerForm.addEventListener('submit', event => {
             event.preventDefault(); const feedback = document.querySelector('#order-feedback');
             if (!getCart().length) { feedback.textContent = 'Añade al menos un producto antes de confirmar.'; return; }
+            if (!customerForm.reportValidity()) return;
             if (customerForm.elements.save_data.checked) {
                 const values = Object.fromEntries(new FormData(customerForm).entries());
                 delete values.save_data;
                 localStorage.setItem(customerDataKey, JSON.stringify(values));
             } else localStorage.removeItem(customerDataKey);
-            feedback.textContent = 'Encargo preparado. Te contactaremos por WhatsApp para confirmar los detalles, referencias y pago.';
+            feedback.textContent = 'Enviando tu encargo…';
+            const values = Object.fromEntries(new FormData(customerForm).entries());
+            delete values.save_data;
+            fetch('guardar_pedido.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({...values, items: getCart()})
+            })
+                .then(response => response.json())
+                .then(response => {
+                    feedback.textContent = response.mensaje;
+                    if (response.ok) {
+                        saveCart([]);
+                        renderCart();
+                    }
+                })
+                .catch(() => { feedback.textContent = 'No pudimos enviar el encargo. Inténtalo nuevamente.'; });
         });
     }
     updateCount(); renderCart();

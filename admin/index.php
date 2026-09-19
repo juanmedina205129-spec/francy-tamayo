@@ -65,9 +65,9 @@ incluirTemplates('header');
                         <b>→</b>
                     </a>
                 <?php endforeach; ?>
-                <a href="<?= BASE_URL ?>contacto.php" class="admin-action-card admin-action-featured">
+                <a href="<?= BASE_URL ?>admin/pedidos.php" class="admin-action-card admin-action-featured">
                     <span>✉</span>
-                    <div><strong>Encargos personalizados</strong><small>Abrir formulario de pedido a tu medida</small></div>
+                    <div><strong>Encargos personalizados</strong><small>Consultar pedidos enviados desde el carrito</small></div>
                     <b>→</b>
                 </a>
             </div>
