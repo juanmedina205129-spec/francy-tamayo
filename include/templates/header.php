@@ -34,7 +34,6 @@
 <a href="<?php echo BASE_URL;?>retratos.php" class="<?php echo $paginaActual === 'retratos.php' ? 'active' : ''; ?>">Retratos</a>
 <a href="<?php echo BASE_URL;?>camisetas.php" class="<?php echo $paginaActual === 'camisetas.php' ? 'active' : ''; ?>">Camisetas</a>
 <a href="<?php echo BASE_URL;?>como-funciona.php" class="<?php echo $paginaActual === 'como-funciona.php' ? 'active' : ''; ?>">Como funciona</a>
-<a href="<?php echo BASE_URL;?>contacto.php">Contacto</a>
 <?php iniciarSesion(); ?>
 
 <?php if (!empty($_SESSION['login'])): ?>
