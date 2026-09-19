@@ -881,19 +881,19 @@
 .category-paintings .category-hero{
     background:
         linear-gradient(90deg, rgba(33,53,36,.95), rgba(33,53,36,.74), rgba(33,53,36,.42)),
-        url('../../imagenes/img/image13.png') center/cover no-repeat;
+        url('../../imagenes/productos/cuadro-golondrina.png') center/cover no-repeat;
 }
 
 .category-portraits .category-hero{
     background:
         linear-gradient(90deg, rgba(33,53,36,.95), rgba(33,53,36,.74), rgba(33,53,36,.42)),
-        url('../../imagenes/img/image15.png') center/cover no-repeat;
+        url('../../imagenes/productos/cuadro-buho.png') center/cover no-repeat;
 }
 
 .category-shirts .category-hero{
     background:
         linear-gradient(90deg, rgba(33,53,36,.96), rgba(33,53,36,.78), rgba(33,53,36,.46)),
-        url('../../imagenes/img/image11.png') center/cover no-repeat;
+        url('../../imagenes/productos/estuche-azulejo-2.png') center/cover no-repeat;
 }
 
 @keyframes heroReveal{
