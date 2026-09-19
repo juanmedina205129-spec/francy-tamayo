@@ -67,7 +67,7 @@ incluirTemplates('header');
                 <?php endforeach; ?>
                 <a href="<?= BASE_URL ?>contacto.php" class="admin-action-card admin-action-featured">
                     <span>✉</span>
-                    <div><strong>Solicitudes de clientes</strong><small>Abrir página de contacto</small></div>
+                    <div><strong>Encargos personalizados</strong><small>Abrir formulario de pedido a tu medida</small></div>
                     <b>→</b>
                 </a>
             </div>
