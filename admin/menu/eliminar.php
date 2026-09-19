@@ -35,16 +35,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $resultado = $stmt->get_result();
     $producto = $resultado->fetch_assoc();
 
-    if ($producto) {
-
-        // ELIMINAR DE LA BASE DE DATOS
-        $stmt = $db->prepare("DELETE FROM productos WHERE id = ?");
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        eliminarImagenProductoSubida($producto['imagen']);
+    if (!$producto) {
+        header("Location: index.php?error=no_encontrado");
+        exit;
     }
 
-    // REDIRECCIÓN
+    // ELIMINAR DE LA BASE DE DATOS
+    $stmt = $db->prepare("DELETE FROM productos WHERE id = ?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    eliminarImagenProductoSubida($producto['imagen']);
+
     header("Location: index.php?eliminado=1");
     exit;
 }

@@ -3,13 +3,13 @@
     const customerDataKey = 'francy-tamayo-customer-data';
     const money = value => new Intl.NumberFormat('es-CO', {style: 'currency', currency: 'COP', maximumFractionDigits: 0}).format(value);
     const defaultCatalog = [
-        ['Retrato Golden Retriever', 'Pintura al óleo', 280000, 'assets/imagenes/productos/cuadro-golondrina.png'], ['Perro en acuarela', 'Acuarela', 195000, 'assets/imagenes/productos/cuadro-jilguero.png'],
-        ['Ave colorida - acuarela', 'Acuarela', 175000, 'assets/imagenes/productos/cuadro-buho.png'], ['Martín pescador', 'Acuarela', 160000, 'assets/imagenes/productos/estuche-golondrina.png'],
-        ['Perro blanco - óleo', 'Pintura al óleo', 260000, 'assets/imagenes/productos/estuche-plumas.png'], ['Retrato mascota personalizado', 'Retrato de mascotas', 220000, 'assets/imagenes/productos/cuadro-buho.png'],
-        ['Retrato canino clásico', 'Retrato de mascotas', 250000, 'assets/imagenes/productos/cuadro-jilguero.png'], ['Retrato doble mascotas', 'Retrato de mascotas', 380000, 'assets/imagenes/productos/cojin-jilguero.png'],
-        ['Camiseta Perro Acuarela', 'Camiseta', 85000, 'assets/imagenes/productos/estuche-azulejo.png'], ['Camiseta Gato Minimalista', 'Camiseta', 75000, 'assets/imagenes/productos/estuche-plumas.png'],
-        ['Camiseta Tigre Estampado', 'Camiseta', 90000, 'assets/imagenes/productos/estuche-golondrina.png'], ['Camiseta Mascota Personalizada', 'Camisetas personalizadas', 110000, 'assets/imagenes/productos/estuche-buho.png']
-    ].map(([name, category, price, image]) => ({name, category, price, image}));
+        ['Retrato Golden Retriever', 'Pintura al óleo', 'pinturas', 280000, 'assets/imagenes/productos/cuadro-golondrina.png'], ['Perro en acuarela', 'Acuarela', 'pinturas', 195000, 'assets/imagenes/productos/cuadro-jilguero.png'],
+        ['Ave colorida - acuarela', 'Acuarela', 'pinturas', 175000, 'assets/imagenes/productos/cuadro-buho.png'], ['Martín pescador', 'Acuarela', 'pinturas', 160000, 'assets/imagenes/productos/estuche-golondrina.png'],
+        ['Perro blanco - óleo', 'Pintura al óleo', 'pinturas', 260000, 'assets/imagenes/productos/estuche-plumas.png'], ['Retrato mascota personalizado', 'Retrato de mascotas', 'retratos', 220000, 'assets/imagenes/productos/cuadro-buho.png'],
+        ['Retrato canino clásico', 'Retrato de mascotas', 'retratos', 250000, 'assets/imagenes/productos/cuadro-jilguero.png'], ['Retrato doble mascotas', 'Retrato de mascotas', 'retratos', 380000, 'assets/imagenes/productos/cojin-jilguero.png'],
+        ['Camiseta Perro Acuarela', 'Camiseta', 'camisetas', 85000, 'assets/imagenes/productos/estuche-azulejo.png'], ['Camiseta Gato Minimalista', 'Camiseta', 'camisetas', 75000, 'assets/imagenes/productos/estuche-plumas.png'],
+        ['Camiseta Tigre Estampado', 'Camiseta', 'camisetas', 90000, 'assets/imagenes/productos/estuche-golondrina.png'], ['Camiseta Mascota Personalizada', 'Camisetas personalizadas', 'camisetas', 110000, 'assets/imagenes/productos/estuche-buho.png']
+    ].map(([name, category, group, price, image]) => ({name, category, group, price, image}));
     const catalog = Array.isArray(window.FRANCY_PRODUCTS) && window.FRANCY_PRODUCTS.length ? window.FRANCY_PRODUCTS : defaultCatalog;
 
     const getCart = () => { try { return JSON.parse(localStorage.getItem(cartKey)) || []; } catch { return []; } };
@@ -29,12 +29,20 @@
         setTimeout(() => button.textContent = original, 1200);
     });
 
+    const normalize = value => value.toLocaleLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    const stopwords = new Set(['de', 'del', 'la', 'el', 'los', 'las', 'al', 'por', 'con', 'y', 'a', 'en', 'un', 'una']);
     const renderSearch = term => {
         const grid = document.querySelector('#search-results'); const summary = document.querySelector('#search-summary');
         if (!grid || !summary) return;
-        const cleanTerm = term.trim().toLocaleLowerCase();
+        const cleanTerm = term.trim();
         if (!cleanTerm) { grid.innerHTML = ''; summary.textContent = 'Escribe un término o elige una búsqueda popular.'; return; }
-        const results = catalog.filter(item => `${item.name} ${item.category}`.toLocaleLowerCase().includes(cleanTerm) || (cleanTerm.includes('personalizadas') && item.category.includes('Camisetas')) || (cleanTerm.includes('retratos') && item.category.includes('Retrato')));
+        const allWords = normalize(cleanTerm).split(/\s+/).filter(Boolean);
+        const meaningfulWords = allWords.filter(word => !stopwords.has(word));
+        const words = meaningfulWords.length ? meaningfulWords : allWords;
+        const results = catalog.filter(item => {
+            const haystackWords = normalize(`${item.name} ${item.category} ${item.group || ''}`).split(/\s+/).filter(Boolean);
+            return words.every(word => haystackWords.some(hw => hw.startsWith(word) || word.startsWith(hw)));
+        });
         summary.textContent = results.length ? `${results.length} resultado${results.length === 1 ? '' : 's'} para “${term}”.` : `No encontramos productos para “${term}”.`;
         grid.innerHTML = results.length ? results.map(item => `<article class="product-card search-card"><div class="product-image"><img src="${item.image}" alt="${item.name}"></div><div class="product-body"><span>${item.category}</span><h3>${item.name}</h3><div class="product-footer"><strong>${money(item.price)}</strong><button class="add-to-cart" data-product="${item.name}" data-category="${item.category}" data-price="${item.price}" data-image="${item.image}">Añadir</button></div></div></article>`).join('') : '<div class="search-empty">Prueba con “acuarela”, “retratos” o “camisetas”.</div>';
     };
@@ -86,14 +94,15 @@
         });
         customerForm.addEventListener('submit', event => {
             event.preventDefault(); const feedback = document.querySelector('#order-feedback');
-            if (!getCart().length) { feedback.textContent = 'Añade al menos un producto antes de confirmar.'; return; }
+            const setFeedback = (text, isError) => { feedback.textContent = text; feedback.classList.toggle('is-error', !!isError); };
+            if (!getCart().length) { setFeedback('Añade al menos un producto antes de confirmar.', true); return; }
             if (!customerForm.reportValidity()) return;
             if (customerForm.elements.save_data.checked) {
                 const values = Object.fromEntries(new FormData(customerForm).entries());
                 delete values.save_data;
                 localStorage.setItem(customerDataKey, JSON.stringify(values));
             } else localStorage.removeItem(customerDataKey);
-            feedback.textContent = 'Enviando tu encargo…';
+            setFeedback('Enviando tu encargo…', false);
             const values = Object.fromEntries(new FormData(customerForm).entries());
             delete values.save_data;
             fetch('guardar_pedido.php', {
@@ -103,13 +112,13 @@
             })
                 .then(response => response.json())
                 .then(response => {
-                    feedback.textContent = response.mensaje;
+                    setFeedback(response.mensaje, !response.ok);
                     if (response.ok) {
                         saveCart([]);
                         renderCart();
                     }
                 })
-                .catch(() => { feedback.textContent = 'No pudimos enviar el encargo. Inténtalo nuevamente.'; });
+                .catch(() => { setFeedback('No pudimos enviar el encargo. Inténtalo nuevamente.', true); });
         });
     }
     updateCount(); renderCart();

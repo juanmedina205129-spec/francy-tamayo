@@ -10,14 +10,36 @@ $db = conectarDB();
 
 $scripts = [ 'datatable', 'admin']; // importante para JS
 
-incluirTemplates('header'); 
+incluirTemplates('header', [
+    'estilosExtra' => [
+        'https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css',
+        'https://cdn.datatables.net/responsive/3.0.2/css/responsive.dataTables.min.css',
+    ],
+    'scriptsExtraHead' => [
+        'https://code.jquery.com/jquery-3.7.1.min.js',
+        'https://cdn.datatables.net/2.0.8/js/dataTables.min.js',
+        'https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.min.js',
+    ],
+]);
 
 
 
 // CONSULTA
 $query = "SELECT * FROM productos ORDER BY orden ASC, id ASC";
 $resultado = mysqli_query($db, $query);
-$mensaje = isset($_GET['ok']) ? 'El producto se ' . ($_GET['ok'] === 'creado' ? 'creó' : 'actualizó') . ' correctamente.' : (isset($_GET['eliminado']) ? 'El producto se eliminó correctamente.' : '');
+$mensaje = '';
+$mensajeEsError = false;
+if (isset($_GET['ok'])) {
+    $mensaje = 'El producto se ' . ($_GET['ok'] === 'creado' ? 'creó' : 'actualizó') . ' correctamente.';
+} elseif (isset($_GET['eliminado'])) {
+    $mensaje = 'El producto se eliminó correctamente.';
+} elseif (($_GET['error'] ?? null) === 'seguridad') {
+    $mensaje = 'No se pudo completar la acción: tu sesión de seguridad expiró. Recarga la página e inténtalo de nuevo.';
+    $mensajeEsError = true;
+} elseif (($_GET['error'] ?? null) === 'no_encontrado') {
+    $mensaje = 'El producto que intentabas eliminar ya no existe (puede que se haya eliminado desde otra pestaña).';
+    $mensajeEsError = true;
+}
 
 ?>
 
@@ -34,7 +56,7 @@ $mensaje = isset($_GET['ok']) ? 'El producto se ' . ($_GET['ok'] === 'creado' ? 
         </div>
 
         <?php if ($mensaje): ?>
-            <p class="admin-platos-notice" role="status"><?= htmlspecialchars($mensaje); ?></p>
+            <p class="admin-platos-notice<?= $mensajeEsError ? ' admin-platos-notice-error' : '' ?>" role="<?= $mensajeEsError ? 'alert' : 'status' ?>"><?= htmlspecialchars($mensaje); ?></p>
         <?php endif; ?>
 
         <div class="admin-platos-nav">
@@ -70,7 +92,7 @@ $mensaje = isset($_GET['ok']) ? 'El producto se ' . ($_GET['ok'] === 'creado' ? 
                         <td><?= htmlspecialchars($producto['tipo']); ?></td>
                         <td>$<?= number_format((float) $producto['precio'], 0, ',', '.'); ?></td>
                         <td>
-                            <img src="<?= BASE_URL . $producto['imagen']; ?>" class="admin-platos-img">
+                            <img src="<?= BASE_URL . $producto['imagen']; ?>" alt="<?= htmlspecialchars($producto['nombre']); ?>" class="admin-platos-img">
                         </td>
                         <td><?= htmlspecialchars(ucfirst($producto['estado'])); ?></td>
                         <td><?= $producto['orden']; ?></td>

@@ -38,11 +38,15 @@ incluirTemplates('header');
                 </div>
             </div>
 
-            <div class="product-grid category-products">
-                <?php foreach ($productos as $producto): ?>
-                    <?php renderizarTarjetaProducto($producto); ?>
-                <?php endforeach; ?>
-            </div>
+            <?php if ($productos): ?>
+                <div class="product-grid category-products">
+                    <?php foreach ($productos as $producto): ?>
+                        <?php renderizarTarjetaProducto($producto); ?>
+                    <?php endforeach; ?>
+                </div>
+            <?php else: ?>
+                <div class="search-empty">No hay pinturas con este filtro por ahora. Prueba con otra disponibilidad.</div>
+            <?php endif; ?>
         </div>
     </section>
 </main>

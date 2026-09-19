@@ -84,59 +84,59 @@ incluirTemplates('header');
     <section class="admin-container admin-container-admin admin-product-form-area">
         <main class="admin-card">
             <span class="admin-card-eyebrow">Nueva pieza</span>
-            <h1>Información del producto</h1>
+            <h2>Información del producto</h2>
             <p class="admin-card-intro">Los campos con información precisa ayudan a que tus clientes encuentren y entiendan mejor cada producto.</p>
 
             <?php if ($mensaje): ?>
-                <p id="mensajeOk" class="mensajeOk"><?php echo htmlspecialchars($mensaje); ?></p>
+                <p id="mensajeOk" class="mensajeOk" role="status"><?php echo htmlspecialchars($mensaje); ?></p>
             <?php endif; ?>
             <?php if (isset($errores['general'])): ?><p class="error" role="alert"><?php echo htmlspecialchars($errores['general']); ?></p><?php endif; ?>
 
             <form class="admin-form" method="POST" enctype="multipart/form-data" novalidate>
                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrfToken()) ?>">
-                <label>Nombre</label>
-                <input type="text" name="nombre" value="<?php echo htmlspecialchars($nombre); ?>">
+                <label for="nombre">Nombre</label>
+                <input id="nombre" type="text" name="nombre" value="<?php echo htmlspecialchars($nombre); ?>">
                 <?php if (isset($errores['nombre'])): ?><p class="error"><?php echo $errores['nombre']; ?></p><?php endif; ?>
 
-                <label>Categoria</label>
-                <select name="categoria">
+                <label for="categoria">Categoria</label>
+                <select id="categoria" name="categoria">
                     <option value="pinturas" <?php echo $categoria === 'pinturas' ? 'selected' : ''; ?>>Pinturas</option>
                     <option value="retratos" <?php echo $categoria === 'retratos' ? 'selected' : ''; ?>>Retratos</option>
                     <option value="camisetas" <?php echo $categoria === 'camisetas' ? 'selected' : ''; ?>>Camisetas</option>
                 </select>
 
-                <label>Tipo</label>
-                <input type="text" name="tipo" value="<?php echo htmlspecialchars($tipo); ?>" placeholder="Ej: Acuarela, Camiseta, Retrato por encargo">
+                <label for="tipo">Tipo</label>
+                <input id="tipo" type="text" name="tipo" value="<?php echo htmlspecialchars($tipo); ?>" placeholder="Ej: Acuarela, Camiseta, Retrato por encargo">
                 <?php if (isset($errores['tipo'])): ?><p class="error"><?php echo $errores['tipo']; ?></p><?php endif; ?>
 
-                <label>Descripcion</label>
-                <textarea name="descripcion"><?php echo htmlspecialchars($descripcion); ?></textarea>
+                <label for="descripcion">Descripcion</label>
+                <textarea id="descripcion" name="descripcion"><?php echo htmlspecialchars($descripcion); ?></textarea>
 
-                <label>Precio</label>
-                <input type="number" name="precio" min="0" value="<?php echo htmlspecialchars((string) $precio); ?>">
+                <label for="precio">Precio</label>
+                <input id="precio" type="number" name="precio" min="0" value="<?php echo htmlspecialchars((string) $precio); ?>">
                 <?php if (isset($errores['precio'])): ?><p class="error"><?php echo $errores['precio']; ?></p><?php endif; ?>
 
-                <label>Estado</label>
-                <select name="estado">
+                <label for="estado">Estado</label>
+                <select id="estado" name="estado">
                     <option value="disponible" <?php echo $estado === 'disponible' ? 'selected' : ''; ?>>Disponible</option>
                     <option value="encargo" <?php echo $estado === 'encargo' ? 'selected' : ''; ?>>Por encargo</option>
                     <option value="agotado" <?php echo $estado === 'agotado' ? 'selected' : ''; ?>>Agotado</option>
                 </select>
 
-                <label>Valoracion</label>
-                <input type="number" name="rating" min="0" max="5" step="0.1" value="<?php echo htmlspecialchars((string) $rating); ?>">
+                <label for="rating">Valoracion</label>
+                <input id="rating" type="number" name="rating" min="0" max="5" step="0.1" value="<?php echo htmlspecialchars((string) $rating); ?>">
 
-                <label>Orden</label>
-                <input type="number" name="orden" value="<?php echo htmlspecialchars((string) $orden); ?>">
+                <label for="orden">Orden</label>
+                <input id="orden" type="number" name="orden" value="<?php echo htmlspecialchars((string) $orden); ?>">
 
                 <label><input type="checkbox" name="destacado" <?php echo $destacado ? 'checked' : ''; ?>> Destacado en inicio</label>
                 <label><input type="checkbox" name="activo" <?php echo $activo ? 'checked' : ''; ?>> Activo</label>
 
-                <label>Imagen</label>
-                <input type="file" name="imagen" accept="image/jpeg, image/png, image/webp, image/avif">
+                <label for="imagen">Imagen</label>
+                <input id="imagen" type="file" name="imagen" accept="image/jpeg, image/png, image/webp, image/avif">
                 <?php if (isset($errores['imagen'])): ?><p class="error"><?php echo $errores['imagen']; ?></p><?php endif; ?>
 
-                <img id="preview" style="max-width:200px; display:none;">
+                <img id="preview" alt="Vista previa de la imagen seleccionada" style="max-width:200px; display:none;">
                 <input type="submit" value="Crear producto" class="admin-btn admin-btn-create-product">
             </form>
         </main>

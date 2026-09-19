@@ -791,7 +791,15 @@
     cursor:pointer;
 }
 
-.filter.active{
+.filter:hover,
+.filter:focus-visible{
+    border-color:#a9c5ab;
+    background:#edf3e8;
+    color:#3f3a31;
+}
+
+.filter.active,
+.filter.active:hover{
     background:#447451;
     border-color:#447451;
     color:#fff;
@@ -968,7 +976,7 @@
 
     .home-page .hero{
         align-items:flex-start;
-        padding-top:230px;
+        padding-top:56px;
         padding-bottom:72px;
     }
 
@@ -1031,7 +1039,7 @@
 
     .category-hero{
         min-height:auto;
-        padding:210px 0 70px;
+        padding:56px 0 70px;
     }
 
     .category-hero h1{

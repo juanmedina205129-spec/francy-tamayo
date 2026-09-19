@@ -137,6 +137,7 @@ function productosParaJavascript(array $productos): array
     return array_map(static fn(array $producto): array => [
         'name' => $producto['nombre'],
         'category' => $producto['tipo'],
+        'group' => $producto['categoria'],
         'price' => (float) $producto['precio'],
         'image' => $producto['imagen'],
     ], $productos);

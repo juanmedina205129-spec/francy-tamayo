@@ -7,18 +7,18 @@
 @import url('./base/global.css?v=2');
 
 /* Layout */
-@import url('./layout/header.css?v=7');
+@import url('./layout/header.css?v=8');
 @import url('./layout/footer.css?v=3');
 
 /* Componentes reutilizables */
-@import url('./componentes/ui.css?v=3');
+@import url('./componentes/ui.css?v=4');
 @import url('./componentes/styles.css?v=2');
 
 /* Paginas */
-@import url('./paginas/index.css?v=17');
-@import url('./paginas/contacto.css?v=2');
+@import url('./paginas/index.css?v=18');
+@import url('./paginas/contacto.css?v=3');
 @import url('./paginas/admin.css?v=4');
 @import url('./paginas/crear.css?v=2');
-@import url('./paginas/menu.css?v=2');
+@import url('./paginas/menu.css?v=3');
 @import url('./paginas/login.css?v=4');
-@import url('./paginas/semana6.css?v=2');
+@import url('./paginas/semana6.css?v=3');

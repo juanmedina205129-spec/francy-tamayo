@@ -111,6 +111,7 @@
     color:#fff;
     font-weight:900;
     box-shadow:none;
+    gap:6px;
 }
 
 .nav-session,
@@ -181,7 +182,7 @@
     height:20px;
     padding:0 5px;
     border-radius:999px;
-    background:#d95f45;
+    background:#bd4d37;
     color:#fff;
     font-size:11px;
     line-height:20px;

@@ -4,19 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Francy Tamayo</title>
-<link rel="stylesheet" href="<?php echo BASE_URL;?>assets/css/app.css?v=15">
+<link rel="stylesheet" href="<?php echo BASE_URL;?>assets/css/app.css?v=<?php echo filemtime(__DIR__ . '/../../assets/css/app.css'); ?>">
 
-<!-- jQuery  -->
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
-<!-- DataTables CSS -->
-<link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.dataTables.min.css">
-
-<!-- DataTables JS -->
-<script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.min.js"></script>
-
+<?php if (isset($estilosExtra) && is_array($estilosExtra)): foreach ($estilosExtra as $href): ?>
+<link rel="stylesheet" href="<?= htmlspecialchars($href) ?>">
+<?php endforeach; endif; ?>
+<?php if (isset($scriptsExtraHead) && is_array($scriptsExtraHead)): foreach ($scriptsExtraHead as $src): ?>
+<script src="<?= htmlspecialchars($src) ?>"></script>
+<?php endforeach; endif; ?>
 
 </head>
 
@@ -64,7 +59,7 @@ Iniciar sesión
 <a href="<?php echo BASE_URL;?>buscador.php" class="nav-search <?php echo $paginaActual === 'buscador.php' ? 'active' : ''; ?>" aria-label="Buscar productos"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"></circle><path d="m16 16 4 4"></path></svg><span class="nav-search-label">Buscar</span></a>
 <a href="<?php echo BASE_URL;?>carrito.php" class="nav-cart <?php echo $paginaActual === 'carrito.php' ? 'active' : ''; ?>" aria-label="Ver carrito">♧<span class="cart-count" data-cart-count>0</span></a>
 </div>
-<a target="_blank" href="https://wa.me/573184597719" class="btn-nav">WhatsApp</a>
+<a target="_blank" href="https://wa.me/573184597719" class="btn-nav" aria-label="Escríbenos por WhatsApp"><svg class="btn-nav-icon" viewBox="0 0 24 24" aria-hidden="true" width="18" height="18" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.4-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.2-.7.8-.8.9-.1.2-.3.2-.5.1-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5l.4-.4c.1-.1.2-.2.2-.4.1-.1 0-.3 0-.4-.1-.1-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9 0 1.1.8 2.2.9 2.4.1.2 1.6 2.5 4 3.5.6.2 1 .4 1.3.5.5.2 1 .1 1.4.1.4-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1-.1-.1-.2-.2-.4-.3Z"></path></svg><span class="btn-nav-label">WhatsApp</span></a>
 </div>
 
 </div>

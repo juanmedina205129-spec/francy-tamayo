@@ -2,7 +2,8 @@
 
 define('BASE_URL', '/francytamayo/');
 
-function incluirTemplates(string $nombre): void {
+function incluirTemplates(string $nombre, array $datos = []): void {
+    extract($datos);
     include __DIR__ . "/templates/$nombre.php";
 }
 

@@ -3,12 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
  
     const form = document.querySelector(".admin-form");
     const preview = document.getElementById("preview");
- 
-       // LIMPIAR URL
-    if (window.location.search.includes("ok=1")) {
-        window.history.replaceState({}, document.title, window.location.pathname);
-    }
- 
+
     // PREVIEW
     document.querySelector('[name="imagen"]').addEventListener("change", e => {
         const file = e.target.files[0];
@@ -63,12 +58,6 @@ document.addEventListener("DOMContentLoaded", () => {
     function limpiarErrores() {
         document.querySelectorAll(".error").forEach(e => e.remove());
     }
- 
-    // MENSAJE DESAPARECE
-    const msg = document.getElementById("mensajeOk");
-    if (msg) {
-        setTimeout(() => msg.remove(), 3000);
-    }
- 
+
 });
 

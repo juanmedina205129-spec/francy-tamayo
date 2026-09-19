@@ -106,54 +106,54 @@ incluirTemplates('header');
 <section class="admin-container admin-container-admin admin-product-form-area">
     <main class="admin-card">
         <span class="admin-card-eyebrow">Edición</span>
-        <h1>Información del producto</h1>
+        <h2>Información del producto</h2>
         <p class="admin-card-intro">Modifica solo lo necesario. Puedes conservar la imagen actual o cargar una nueva.</p>
         <?php if (isset($errores['general'])): ?><p class="error" role="alert"><?= htmlspecialchars($errores['general']) ?></p><?php endif; ?>
 
         <form method="POST" enctype="multipart/form-data" class="admin-form">
             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrfToken()) ?>">
-            <label>Nombre</label>
-            <input type="text" name="nombre" value="<?= htmlspecialchars($nombre) ?>">
+            <label for="nombre">Nombre</label>
+            <input id="nombre" type="text" name="nombre" value="<?= htmlspecialchars($nombre) ?>">
             <?php if (isset($errores['nombre'])): ?><p class="error"><?= $errores['nombre'] ?></p><?php endif; ?>
 
-            <label>Categoria</label>
-            <select name="categoria">
+            <label for="categoria">Categoria</label>
+            <select id="categoria" name="categoria">
                 <option value="pinturas" <?= $categoria === 'pinturas' ? 'selected' : '' ?>>Pinturas</option>
                 <option value="retratos" <?= $categoria === 'retratos' ? 'selected' : '' ?>>Retratos</option>
                 <option value="camisetas" <?= $categoria === 'camisetas' ? 'selected' : '' ?>>Camisetas</option>
             </select>
 
-            <label>Tipo</label>
-            <input type="text" name="tipo" value="<?= htmlspecialchars($tipo) ?>">
+            <label for="tipo">Tipo</label>
+            <input id="tipo" type="text" name="tipo" value="<?= htmlspecialchars($tipo) ?>">
             <?php if (isset($errores['tipo'])): ?><p class="error"><?= $errores['tipo'] ?></p><?php endif; ?>
 
-            <label>Descripcion</label>
-            <textarea name="descripcion"><?= htmlspecialchars((string) $descripcion) ?></textarea>
+            <label for="descripcion">Descripcion</label>
+            <textarea id="descripcion" name="descripcion"><?= htmlspecialchars((string) $descripcion) ?></textarea>
 
-            <label>Precio</label>
-            <input type="number" name="precio" min="0" value="<?= htmlspecialchars((string) $precio) ?>">
+            <label for="precio">Precio</label>
+            <input id="precio" type="number" name="precio" min="0" value="<?= htmlspecialchars((string) $precio) ?>">
             <?php if (isset($errores['precio'])): ?><p class="error"><?= $errores['precio'] ?></p><?php endif; ?>
 
-            <label>Estado</label>
-            <select name="estado">
+            <label for="estado">Estado</label>
+            <select id="estado" name="estado">
                 <option value="disponible" <?= $estado === 'disponible' ? 'selected' : '' ?>>Disponible</option>
                 <option value="encargo" <?= $estado === 'encargo' ? 'selected' : '' ?>>Por encargo</option>
                 <option value="agotado" <?= $estado === 'agotado' ? 'selected' : '' ?>>Agotado</option>
             </select>
 
-            <label>Valoracion</label>
-            <input type="number" name="rating" min="0" max="5" step="0.1" value="<?= htmlspecialchars((string) $rating) ?>">
+            <label for="rating">Valoracion</label>
+            <input id="rating" type="number" name="rating" min="0" max="5" step="0.1" value="<?= htmlspecialchars((string) $rating) ?>">
 
-            <label>Orden</label>
-            <input type="number" name="orden" value="<?= htmlspecialchars((string) $orden) ?>">
+            <label for="orden">Orden</label>
+            <input id="orden" type="number" name="orden" value="<?= htmlspecialchars((string) $orden) ?>">
 
             <label><input type="checkbox" name="destacado" <?= $destacado ? 'checked' : '' ?>> Destacado en inicio</label>
             <label><input type="checkbox" name="activo" <?= $activo ? 'checked' : '' ?>> Activo</label>
 
-            <label>Imagen</label>
-            <input type="file" name="imagen" accept="image/*" id="inputImagen">
+            <label for="inputImagen">Imagen</label>
+            <input id="inputImagen" type="file" name="imagen" accept="image/*">
             <?php if (isset($errores['imagen'])): ?><p class="error"><?= $errores['imagen'] ?></p><?php endif; ?>
-            <img id="previewImagen" src="<?= BASE_URL . ltrim($rutaImagen, '/') ?>?t=<?= time() ?>" width="120" style="margin-top:5px;">
+            <img id="previewImagen" src="<?= BASE_URL . ltrim($rutaImagen, '/') ?>?t=<?= time() ?>" alt="Vista previa de <?= htmlspecialchars($nombre) ?>" width="120" style="margin-top:5px;">
 
             <input type="submit" value="Guardar cambios" class="admin-btn admin-btn-save-product">
         </form>
