@@ -3,7 +3,7 @@
 require_once __DIR__ . '/../../include/funciones.php';
 auth();
 
-require_once __DIR__ . '/../include/config/database.php';
+require_once __DIR__ . '/../../include/config/database.php';
 $db = conectarDB();
 
 incluirTemplates('header'); 

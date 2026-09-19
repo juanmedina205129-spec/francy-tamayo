@@ -1,8 +1,8 @@
-CREATE DATABASE IF NOT EXISTS restaurante_admin
+CREATE DATABASE IF NOT EXISTS francytamayo
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_ci;
 
-USE restaurante_admin;
+USE francytamayo;
 
 CREATE TABLE IF NOT EXISTS usuarios (
   id INT AUTO_INCREMENT PRIMARY KEY,
