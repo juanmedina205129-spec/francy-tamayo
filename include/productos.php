@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/config/database.php';
 
-function obtenerProductos(?string $categoria = null, bool $soloActivos = true): array
+function obtenerProductos(?string $categoria = null, bool $soloActivos = true, ?string $estado = null): array
 {
     try {
         $db = conectarDB();
@@ -19,6 +19,12 @@ function obtenerProductos(?string $categoria = null, bool $soloActivos = true): 
             $valores[] = $categoria;
         }
 
+        if ($estado !== null) {
+            $condiciones[] = 'estado = ?';
+            $tipos .= 's';
+            $valores[] = $estado;
+        }
+
         $sql = 'SELECT * FROM productos';
         if ($condiciones) {
             $sql .= ' WHERE ' . implode(' AND ', $condiciones);
@@ -33,7 +39,7 @@ function obtenerProductos(?string $categoria = null, bool $soloActivos = true): 
 
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     } catch (Throwable $error) {
-        return productosBase($categoria, $soloActivos);
+        return productosBase($categoria, $soloActivos, $estado);
     }
 }
 
@@ -72,7 +78,7 @@ function contarProductosPorCategoria(): array
     return $conteo;
 }
 
-function productosBase(?string $categoria = null, bool $soloActivos = true): array
+function productosBase(?string $categoria = null, bool $soloActivos = true, ?string $estado = null): array
 {
     $productos = [
         ['id' => 1, 'nombre' => 'Retrato Golden Retriever', 'categoria' => 'pinturas', 'tipo' => 'Pintura al oleo', 'descripcion' => 'Obra original inspirada en mascota.', 'precio' => 280000, 'imagen' => 'assets/imagenes/productos/cuadro-golondrina.png', 'estado' => 'disponible', 'rating' => 4.9, 'destacado' => 1, 'activo' => 1, 'orden' => 1],
@@ -95,7 +101,11 @@ function productosBase(?string $categoria = null, bool $soloActivos = true): arr
             return false;
         }
 
-        return $categoria === null || $producto['categoria'] === $categoria;
+        if ($categoria !== null && $producto['categoria'] !== $categoria) {
+            return false;
+        }
+
+        return $estado === null || $producto['estado'] === $estado;
     }));
 }
 

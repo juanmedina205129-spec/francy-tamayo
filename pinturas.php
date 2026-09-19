@@ -2,7 +2,10 @@
 require 'include/funciones.php';
 require 'include/productos.php';
 
-$productos = obtenerProductos('pinturas');
+$estadoFiltro = $_GET['estado'] ?? '';
+$estadosValidos = ['disponible', 'encargo', 'agotado'];
+if (!in_array($estadoFiltro, $estadosValidos, true)) $estadoFiltro = '';
+$productos = obtenerProductos('pinturas', true, $estadoFiltro ?: null);
 incluirTemplates('header');
 ?>
 
@@ -23,15 +26,15 @@ incluirTemplates('header');
             </div>
 
             <div class="store-toolbar">
-                <div class="filter-list">
-                    <button class="filter active">Todos</button>
-                    <button class="filter">Disponible</button>
-                    <button class="filter">Encargo</button>
-                    <button class="filter">Agotado</button>
-                </div>
+                <form class="filter-list" method="GET" aria-label="Filtrar pinturas por disponibilidad">
+                    <button class="filter <?= $estadoFiltro === '' ? 'active' : '' ?>" type="submit" name="estado" value="">Todos</button>
+                    <button class="filter <?= $estadoFiltro === 'disponible' ? 'active' : '' ?>" type="submit" name="estado" value="disponible">Disponible</button>
+                    <button class="filter <?= $estadoFiltro === 'encargo' ? 'active' : '' ?>" type="submit" name="estado" value="encargo">Encargo</button>
+                    <button class="filter <?= $estadoFiltro === 'agotado' ? 'active' : '' ?>" type="submit" name="estado" value="agotado">Agotado</button>
+                </form>
                 <div class="store-count">
                     <span><?= count($productos) ?> productos</span>
-                    <strong>Destacados</strong>
+                    <strong><?= $estadoFiltro ? ucfirst($estadoFiltro) : 'Todos' ?></strong>
                 </div>
             </div>
 

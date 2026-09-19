@@ -1,9 +1,23 @@
 <?php
 require_once __DIR__ . '/../include/funciones.php';
 require_once __DIR__ . '/../include/productos.php';
+require_once __DIR__ . '/../include/pedidos.php';
 auth();
 
 $conteo = contarProductosPorCategoria();
+$conteoEstados = ['disponible' => 0, 'encargo' => 0, 'agotado' => 0];
+$pedidosNuevos = 0;
+try {
+    $db = conectarDB();
+    prepararTablaPedidos($db);
+    $resultadoEstados = $db->query('SELECT estado, COUNT(*) AS total FROM productos WHERE activo = 1 GROUP BY estado');
+    while ($fila = $resultadoEstados->fetch_assoc()) {
+        $conteoEstados[$fila['estado']] = (int) $fila['total'];
+    }
+    $pedidosNuevos = (int) $db->query("SELECT COUNT(*) AS total FROM pedidos WHERE estado = 'nuevo'")->fetch_assoc()['total'];
+} catch (Throwable $error) {
+    // El dashboard sigue mostrando el catálogo base si la base de datos aún no está disponible.
+}
 $catalogo = [
     ['nombre' => 'Pinturas', 'cantidad' => $conteo['pinturas'], 'detalle' => 'Obras disponibles en el catalogo', 'enlace' => BASE_URL . 'pinturas.php', 'icono' => '✦'],
     ['nombre' => 'Retratos', 'cantidad' => $conteo['retratos'], 'detalle' => 'Encargos de mascotas y animales', 'enlace' => BASE_URL . 'retratos.php', 'icono' => '♡'],
@@ -31,7 +45,8 @@ incluirTemplates('header');
             <article class="admin-total-card">
                 <span class="admin-card-icon">✦</span>
                 <div><p>Productos publicados</p><strong><?= $totalProductos ?></strong></div>
-                <small>Catálogo actual</small>
+                <div class="admin-state-counts"><span><?= $conteoEstados['disponible'] ?> disponibles</span><span><?= $conteoEstados['encargo'] ?> por encargo</span><span><?= $conteoEstados['agotado'] ?> agotados</span></div>
+                <small><?= $pedidosNuevos ?> encargos nuevos por revisar</small>
             </article>
             <?php foreach ($catalogo as $categoria): ?>
                 <article class="admin-stat-card">
