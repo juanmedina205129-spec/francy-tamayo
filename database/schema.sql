@@ -28,31 +28,47 @@ CREATE TABLE IF NOT EXISTS productos (
   UNIQUE KEY uq_producto_nombre (nombre)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Los productos se guardan como copia (id, nombre, cantidad, precio) para conservar
+-- el historial aunque el producto cambie o se elimine del catálogo.
 CREATE TABLE IF NOT EXISTS pedidos (
   id INT AUTO_INCREMENT PRIMARY KEY,
+  codigo VARCHAR(12) NULL,
+  origen ENUM('carrito','contacto') NOT NULL DEFAULT 'carrito',
   nombre VARCHAR(120) NOT NULL,
   telefono VARCHAR(50) NOT NULL,
   email VARCHAR(150) NULL,
-  ciudad VARCHAR(120) NOT NULL,
+  ciudad VARCHAR(120) NULL,
   tipo_encargo VARCHAR(100) NOT NULL,
   fecha_entrega DATE NULL,
   tamano VARCHAR(80) NULL,
   presupuesto VARCHAR(80) NULL,
   detalles TEXT NOT NULL,
-  entrega VARCHAR(80) NOT NULL,
-  direccion VARCHAR(255) NOT NULL,
+  entrega VARCHAR(80) NULL,
+  direccion VARCHAR(255) NULL,
   notas TEXT NULL,
   productos JSON NOT NULL,
   subtotal DECIMAL(12,2) NOT NULL DEFAULT 0,
   estado ENUM('nuevo', 'en_proceso', 'cerrado') NOT NULL DEFAULT 'nuevo',
-  fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  fecha_actualizacion TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY uq_pedido_codigo (codigo)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO usuarios (username, password)
-VALUES ('admin', '$2y$10$a/HOaUrAhGP0zdUdmOuQWO2R9xRSCErXLMO2tpjNBN8DWzqJACDc6')
-ON DUPLICATE KEY UPDATE password = VALUES(password);
+CREATE TABLE IF NOT EXISTS intentos_login (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  ip VARCHAR(45) NOT NULL,
+  username VARCHAR(50) NOT NULL,
+  fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  KEY idx_intentos_ip_fecha (ip, fecha)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO productos
+-- Usuario inicial. Cambia la contraseña desde admin/cambiar-clave.php después de instalar.
+-- No se sobrescribe la contraseña si el usuario ya existe.
+INSERT IGNORE INTO usuarios (username, password)
+VALUES ('admin', '$2y$10$a/HOaUrAhGP0zdUdmOuQWO2R9xRSCErXLMO2tpjNBN8DWzqJACDc6');
+
+-- INSERT IGNORE: volver a ejecutar el script no pisa los cambios hechos desde el panel.
+INSERT IGNORE INTO productos
   (nombre, categoria, tipo, descripcion, precio, imagen, estado, rating, destacado, activo, orden)
 VALUES
   ('Retrato Golden Retriever', 'pinturas', 'Pintura al oleo', 'Obra original inspirada en mascota.', 280000, 'assets/imagenes/productos/cuadro-golondrina.png', 'disponible', 4.9, 1, 1, 1),
@@ -67,15 +83,4 @@ VALUES
   ('Camiseta Perro Acuarela', 'camisetas', 'Camiseta', 'Camiseta con diseño animal.', 85000, 'assets/imagenes/productos/estuche-azulejo.png', 'disponible', 4.7, 1, 1, 1),
   ('Camiseta Gato Minimalista', 'camisetas', 'Camiseta', 'Camiseta con gato minimalista.', 75000, 'assets/imagenes/productos/estuche-plumas.png', 'disponible', 4.6, 0, 1, 2),
   ('Camiseta Tigre Estampado', 'camisetas', 'Camiseta', 'Camiseta con estampado de tigre.', 90000, 'assets/imagenes/productos/estuche-golondrina.png', 'disponible', 4.8, 0, 1, 3),
-  ('Camiseta Mascota Personalizada', 'camisetas', 'Camiseta por encargo', 'Camiseta personalizada con mascota.', 110000, 'assets/imagenes/productos/estuche-buho.png', 'encargo', 4.9, 0, 1, 4)
-ON DUPLICATE KEY UPDATE
-  categoria = VALUES(categoria),
-  tipo = VALUES(tipo),
-  descripcion = VALUES(descripcion),
-  precio = VALUES(precio),
-  imagen = VALUES(imagen),
-  estado = VALUES(estado),
-  rating = VALUES(rating),
-  destacado = VALUES(destacado),
-  activo = VALUES(activo),
-  orden = VALUES(orden);
+  ('Camiseta Mascota Personalizada', 'camisetas', 'Camiseta por encargo', 'Camiseta personalizada con mascota.', 110000, 'assets/imagenes/productos/estuche-buho.png', 'encargo', 4.9, 0, 1, 4);

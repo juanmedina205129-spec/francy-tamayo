@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    $id = intval($_POST['id']);
+    $id = (int) entradaTexto($_POST['id']);
 
     if ($id <= 0) {
         header("Location: index.php");
@@ -49,3 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header("Location: index.php?eliminado=1");
     exit;
 }
+
+// Solo se elimina mediante POST desde el diálogo de confirmación.
+header("Location: index.php");
+exit;

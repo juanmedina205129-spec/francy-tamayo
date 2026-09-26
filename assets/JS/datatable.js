@@ -1,7 +1,7 @@
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    const tabla = document.querySelector('#tablaPlatos');
+    const tabla = document.querySelector('#tablaProductos');
     if (!tabla) return;
 
     new DataTable(tabla, {

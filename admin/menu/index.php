@@ -30,41 +30,41 @@ $resultado = mysqli_query($db, $query);
 $mensaje = '';
 $mensajeEsError = false;
 if (isset($_GET['ok'])) {
-    $mensaje = 'El producto se ' . ($_GET['ok'] === 'creado' ? 'creó' : 'actualizó') . ' correctamente.';
+    $mensaje = 'El producto se ' . (entradaTexto($_GET['ok']) === 'creado' ? 'creó' : 'actualizó') . ' correctamente.';
 } elseif (isset($_GET['eliminado'])) {
     $mensaje = 'El producto se eliminó correctamente.';
 } elseif (($_GET['error'] ?? null) === 'seguridad') {
     $mensaje = 'No se pudo completar la acción: tu sesión de seguridad expiró. Recarga la página e inténtalo de nuevo.';
     $mensajeEsError = true;
 } elseif (($_GET['error'] ?? null) === 'no_encontrado') {
-    $mensaje = 'El producto que intentabas eliminar ya no existe (puede que se haya eliminado desde otra pestaña).';
+    $mensaje = 'El producto que buscabas ya no existe (puede que se haya eliminado desde otra pestaña).';
     $mensajeEsError = true;
 }
 
 ?>
 
-<section class="container admin-platos-section">
+<section class="container admin-productos-section">
 
-    <main class="admin-platos-card">
-        <div class="admin-platos-heading">
+    <main class="admin-productos-card">
+        <div class="admin-productos-heading">
             <div>
-                <span class="admin-platos-eyebrow">Administración · Catálogo</span>
-                <h1 class="admin-platos-title">Gestiona tus productos</h1>
+                <span class="admin-productos-eyebrow">Administración · Catálogo</span>
+                <h1 class="admin-productos-title">Gestiona tus productos</h1>
                 <p>Organiza las piezas que verán tus clientes: agrega, actualiza o retira productos del catálogo.</p>
             </div>
-            <span class="admin-platos-total"><?= mysqli_num_rows($resultado); ?> productos</span>
+            <span class="admin-productos-total"><?= mysqli_num_rows($resultado); ?> productos</span>
         </div>
 
         <?php if ($mensaje): ?>
-            <p class="admin-platos-notice<?= $mensajeEsError ? ' admin-platos-notice-error' : '' ?>" role="<?= $mensajeEsError ? 'alert' : 'status' ?>"><?= htmlspecialchars($mensaje); ?></p>
+            <p class="admin-productos-notice<?= $mensajeEsError ? ' admin-productos-notice-error' : '' ?>" role="<?= $mensajeEsError ? 'alert' : 'status' ?>"><?= htmlspecialchars($mensaje); ?></p>
         <?php endif; ?>
 
-        <div class="admin-platos-nav">
-            <a href="<?= BASE_URL ?>admin/menu/crear.php" class="admin-platos-btn-create"><span aria-hidden="true">＋</span> Agregar producto</a>
-            <a href="<?= BASE_URL ?>admin/index.php" class="admin-platos-btn-regresar">← Panel de administración</a>
+        <div class="admin-productos-nav">
+            <a href="<?= BASE_URL ?>admin/menu/crear.php" class="admin-productos-btn-create"><span aria-hidden="true">＋</span> Agregar producto</a>
+            <a href="<?= BASE_URL ?>admin/index.php" class="admin-productos-btn-regresar">← Panel de administración</a>
         </div>
 
-        <table id="tablaPlatos" class="admin-platos-table display responsive nowrap" style="width:100%">
+        <table id="tablaProductos" class="admin-productos-table display responsive nowrap" style="width:100%">
 
             <thead>
                 <tr>
@@ -92,17 +92,17 @@ if (isset($_GET['ok'])) {
                         <td><?= htmlspecialchars($producto['tipo']); ?></td>
                         <td>$<?= number_format((float) $producto['precio'], 0, ',', '.'); ?></td>
                         <td>
-                            <img src="<?= BASE_URL . $producto['imagen']; ?>" alt="<?= htmlspecialchars($producto['nombre']); ?>" class="admin-platos-img">
+                            <img src="<?= htmlspecialchars(BASE_URL . $producto['imagen']); ?>" alt="<?= htmlspecialchars($producto['nombre']); ?>" class="admin-productos-img">
                         </td>
                         <td><?= htmlspecialchars(ucfirst($producto['estado'])); ?></td>
                         <td><?= $producto['orden']; ?></td>
-                        <td class="admin-platos-status">
-                            <span class="admin-platos-status-pill <?= $producto['activo'] ? 'is-active' : 'is-inactive'; ?>"><?= $producto['activo'] ? 'Publicado' : 'Oculto'; ?></span>
+                        <td class="admin-productos-status">
+                            <span class="admin-productos-status-pill <?= $producto['activo'] ? 'is-active' : 'is-inactive'; ?>"><?= $producto['activo'] ? 'Publicado' : 'Oculto'; ?></span>
                         </td>
 
-                        <td class="admin-platos-actions">
-                            <a href="<?= BASE_URL ?>admin/menu/editar.php?id=<?= $producto['id']; ?>" class="admin-platos-btn-edit"><span aria-hidden="true">✎</span> Editar</a>
-                            <button type="button" class="admin-platos-btn-delete" data-delete-product data-product-id="<?= $producto['id']; ?>" data-product-name="<?= htmlspecialchars($producto['nombre'], ENT_QUOTES); ?>"><span aria-hidden="true">×</span> Eliminar</button>
+                        <td class="admin-productos-actions">
+                            <a href="<?= BASE_URL ?>admin/menu/editar.php?id=<?= $producto['id']; ?>" class="admin-productos-btn-edit"><span aria-hidden="true">✎</span> Editar</a>
+                            <button type="button" class="admin-productos-btn-delete" data-delete-product data-product-id="<?= $producto['id']; ?>" data-product-name="<?= htmlspecialchars($producto['nombre'], ENT_QUOTES); ?>"><span aria-hidden="true">×</span> Eliminar</button>
                         </td>
                     </tr>
                 <?php endwhile; ?>

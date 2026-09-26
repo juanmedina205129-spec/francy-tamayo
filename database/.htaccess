@@ -1,0 +1,2 @@
+# Esquema y migraciones: se ejecutan con el cliente de MySQL, no por la web.
+Require all denied

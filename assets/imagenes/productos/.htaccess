@@ -1,0 +1,4 @@
+# Carpeta de imágenes subidas desde el panel: nunca debe ejecutar scripts.
+<FilesMatch "(?i)\.(php[0-9]?|phtml|phar|cgi|pl|py|sh)$">
+    Require all denied
+</FilesMatch>

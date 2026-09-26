@@ -17,6 +17,7 @@
 <a href="<?php echo BASE_URL; ?>camisetas.php">Camisetas</a>
 <a href="<?php echo BASE_URL; ?>como-funciona.php">Como funciona</a>
 <a href="<?php echo BASE_URL; ?>contacto.php">Contacto</a>
+<a href="<?php echo BASE_URL; ?>seguimiento.php">Seguimiento de pedidos</a>
 </div>
 
 <div>

@@ -40,3 +40,4 @@
 .login-back{position:relative; display:inline-block; margin-top:26px; color:#cbd0c2; font-size:14px; font-weight:800;}.login-back:hover{color:#e9ae54;}
 
 @media(max-width:560px){.admin-login-page{padding:130px 16px 60px;}.login-card{padding:30px 24px;}.login-card h1{font-size:32px;}}
+.login-success{margin:0 0 18px; padding:12px 14px; border:1px solid rgba(154,196,140,.55); border-radius:10px; color:#dcefd3; background:rgba(68,116,81,.3); font-size:14px;}

@@ -30,6 +30,7 @@ incluirTemplates('header');
             <span class="section-kicker">Resolvemos tus dudas</span><h2>Preguntas frecuentes</h2>
             <details><summary>¿Cómo solicito un producto personalizado?</summary><p>Elige un retrato o camiseta por encargo, agrégalo al carrito o escríbenos por WhatsApp con una foto y tus indicaciones.</p></details>
             <details><summary>¿Cuánto tarda un pedido?</summary><p>Los productos disponibles se coordinan según el envío. Los encargos toman entre 10 y 20 días hábiles.</p></details>
+            <details><summary>¿Cómo sé en qué va mi pedido?</summary><p>Al confirmar recibes un código como FT-7K3M9Q. Escríbelo junto con tu teléfono en <a href="<?php echo BASE_URL; ?>seguimiento.php">Seguimiento de pedidos</a> para ver su estado.</p></details>
             <details><summary>¿Puedo cambiar la cantidad de un producto?</summary><p>Sí. Desde el carrito puedes aumentar, disminuir o eliminar productos antes de confirmar.</p></details>
         </section>
     </section>

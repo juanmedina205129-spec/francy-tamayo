@@ -1,0 +1,17 @@
+# Sin listados de carpetas (p. ej. /assets/imagenes/productos/).
+Options -Indexes
+
+# El repositorio git nunca debe servirse: contiene todo el código y su historial.
+RedirectMatch 404 (?i)/\.git(/|$)
+
+# Archivos de apoyo que no son páginas: esquemas, documentación, respaldos, configuración.
+<FilesMatch "(?i)\.(sql|md|zip|log|ini|bak|dmp)$|^\.">
+    Require all denied
+</FilesMatch>
+
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    # Impide que otra web cargue la tienda o el panel dentro de un iframe (clickjacking).
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>

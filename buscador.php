@@ -5,7 +5,7 @@ require 'include/productos.php';
 $productos = obtenerProductos();
 incluirTemplates('header');
 
-$busqueda = trim($_GET['q'] ?? '');
+$busqueda = entradaTexto($_GET['q'] ?? '');
 ?>
 
 <main class="search-page">
@@ -28,7 +28,7 @@ $busqueda = trim($_GET['q'] ?? '');
 </main>
 
 <script>
-window.FRANCY_PRODUCTS = <?= json_encode(productosParaJavascript($productos), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>;
+window.FRANCY_PRODUCTS = <?= json_encode(productosParaJavascript($productos), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG); ?>;
 </script>
 
 <?php include 'include/templates/footer.php'; ?>

@@ -10,5 +10,7 @@ function conectarDB():mysqli{
     );
 
     $db->set_charset('utf8mb4');
+    // Misma zona que PHP (America/Bogota, sin horario de verano) para NOW() y los TIMESTAMP.
+    $db->query("SET time_zone = '-05:00'");
     return $db;
 }

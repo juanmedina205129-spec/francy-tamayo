@@ -9,7 +9,6 @@ $conteoEstados = ['disponible' => 0, 'encargo' => 0, 'agotado' => 0];
 $pedidosNuevos = 0;
 try {
     $db = conectarDB();
-    prepararTablaPedidos($db);
     $resultadoEstados = $db->query('SELECT estado, COUNT(*) AS total FROM productos WHERE activo = 1 GROUP BY estado');
     while ($fila = $resultadoEstados->fetch_assoc()) {
         $conteoEstados[$fila['estado']] = (int) $fila['total'];
@@ -82,7 +81,12 @@ incluirTemplates('header');
                 <?php endforeach; ?>
                 <a href="<?= BASE_URL ?>admin/pedidos.php" class="admin-action-card admin-action-featured">
                     <span>✉</span>
-                    <div><strong>Encargos personalizados</strong><small>Consultar pedidos enviados desde el carrito</small></div>
+                    <div><strong>Encargos personalizados</strong><small>Consultar pedidos del carrito y del formulario de contacto</small></div>
+                    <b>→</b>
+                </a>
+                <a href="<?= BASE_URL ?>admin/cambiar-clave.php" class="admin-action-card">
+                    <span>⚿</span>
+                    <div><strong>Cambiar contraseña</strong><small>Actualiza la clave de acceso al panel</small></div>
                     <b>→</b>
                 </a>
             </div>

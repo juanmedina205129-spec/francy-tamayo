@@ -14,14 +14,14 @@ if (!isset($_GET['id'])) {
     exit;
 }
 
-$id = (int) $_GET['id'];
+$id = (int) entradaTexto($_GET['id']);
 $stmt = $db->prepare('SELECT * FROM productos WHERE id = ?');
 $stmt->bind_param('i', $id);
 $stmt->execute();
 $producto = $stmt->get_result()->fetch_assoc();
 
 if (!$producto) {
-    echo 'Producto no encontrado';
+    header('Location: index.php?error=no_encontrado');
     exit;
 }
 
@@ -41,14 +41,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csrfValido($_POST['csrf_token'] ?? null)) {
         $errores['general'] = 'La sesión expiró. Recarga la página e inténtalo de nuevo.';
     }
-    $nombre = trim($_POST['nombre'] ?? '');
-    $descripcion = trim($_POST['descripcion'] ?? '');
-    $precio = (float) ($_POST['precio'] ?? 0);
-    $categoria = $_POST['categoria'] ?? 'pinturas';
-    $tipo = trim($_POST['tipo'] ?? '');
-    $estado = $_POST['estado'] ?? 'disponible';
-    $rating = (float) ($_POST['rating'] ?? 4.8);
-    $orden = (int) ($_POST['orden'] ?? 0);
+    $nombre = entradaTexto($_POST['nombre'] ?? '');
+    $descripcion = entradaTexto($_POST['descripcion'] ?? '');
+    $precio = (float) entradaTexto($_POST['precio'] ?? '0');
+    $categoria = entradaTexto($_POST['categoria'] ?? 'pinturas');
+    $tipo = entradaTexto($_POST['tipo'] ?? '');
+    $estado = entradaTexto($_POST['estado'] ?? 'disponible');
+    $rating = (float) entradaTexto($_POST['rating'] ?? '4.8');
+    $orden = (int) entradaTexto($_POST['orden'] ?? '0');
     $destacado = isset($_POST['destacado']) ? 1 : 0;
     $activo = isset($_POST['activo']) ? 1 : 0;
     $imagen = $_FILES['imagen'] ?? null;
@@ -57,11 +57,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$tipo) $errores['tipo'] = 'El tipo es obligatorio';
     if (!in_array($categoria, ['pinturas', 'retratos', 'camisetas'], true)) $errores['categoria'] = 'Categoria invalida';
     if (!in_array($estado, ['disponible', 'encargo', 'agotado'], true)) $errores['estado'] = 'Estado invalido';
-    if ($precio <= 0) $errores['precio'] = 'Precio invalido';
+    if ($precio <= 0 || $precio > 99999999) $errores['precio'] = 'Precio invalido (entre 1 y 99.999.999)';
+    if ($orden < -1000000 || $orden > 1000000) $errores['orden'] = 'El orden debe estar entre -1.000.000 y 1.000.000';
     if ($rating < 0 || $rating > 5) $errores['rating'] = 'La valoracion debe estar entre 0 y 5';
 
+    // La imagen nueva se guarda solo si el resto del formulario es válido, para no dejar
+    // archivos huérfanos en el disco.
     $imagenAnterior = $rutaImagen;
-    if ($imagen && !empty($imagen['tmp_name'])) {
+    if (empty($errores) && $imagen && !empty($imagen['tmp_name'])) {
         [$nuevaRuta, $errorImagen] = guardarImagenProducto($imagen);
         if ($errorImagen) {
             $errores['imagen'] = $errorImagen;
@@ -122,6 +125,7 @@ incluirTemplates('header');
                 <option value="retratos" <?= $categoria === 'retratos' ? 'selected' : '' ?>>Retratos</option>
                 <option value="camisetas" <?= $categoria === 'camisetas' ? 'selected' : '' ?>>Camisetas</option>
             </select>
+                <?php if (isset($errores['categoria'])): ?><p class="error"><?= htmlspecialchars($errores['categoria']) ?></p><?php endif; ?>
 
             <label for="tipo">Tipo</label>
             <input id="tipo" type="text" name="tipo" value="<?= htmlspecialchars($tipo) ?>">
@@ -131,7 +135,7 @@ incluirTemplates('header');
             <textarea id="descripcion" name="descripcion"><?= htmlspecialchars((string) $descripcion) ?></textarea>
 
             <label for="precio">Precio</label>
-            <input id="precio" type="number" name="precio" min="0" value="<?= htmlspecialchars((string) $precio) ?>">
+            <input id="precio" type="number" name="precio" min="1" value="<?= htmlspecialchars((string) $precio) ?>">
             <?php if (isset($errores['precio'])): ?><p class="error"><?= $errores['precio'] ?></p><?php endif; ?>
 
             <label for="estado">Estado</label>
@@ -140,18 +144,21 @@ incluirTemplates('header');
                 <option value="encargo" <?= $estado === 'encargo' ? 'selected' : '' ?>>Por encargo</option>
                 <option value="agotado" <?= $estado === 'agotado' ? 'selected' : '' ?>>Agotado</option>
             </select>
+                <?php if (isset($errores['estado'])): ?><p class="error"><?= htmlspecialchars($errores['estado']) ?></p><?php endif; ?>
 
             <label for="rating">Valoracion</label>
             <input id="rating" type="number" name="rating" min="0" max="5" step="0.1" value="<?= htmlspecialchars((string) $rating) ?>">
+            <?php if (isset($errores['rating'])): ?><p class="error"><?= htmlspecialchars($errores['rating']) ?></p><?php endif; ?>
 
             <label for="orden">Orden</label>
             <input id="orden" type="number" name="orden" value="<?= htmlspecialchars((string) $orden) ?>">
+            <?php if (isset($errores['orden'])): ?><p class="error"><?= htmlspecialchars($errores['orden']) ?></p><?php endif; ?>
 
             <label><input type="checkbox" name="destacado" <?= $destacado ? 'checked' : '' ?>> Destacado en inicio</label>
             <label><input type="checkbox" name="activo" <?= $activo ? 'checked' : '' ?>> Activo</label>
 
             <label for="inputImagen">Imagen</label>
-            <input id="inputImagen" type="file" name="imagen" accept="image/*">
+            <input id="inputImagen" type="file" name="imagen" accept="image/jpeg, image/png, image/webp, image/avif">
             <?php if (isset($errores['imagen'])): ?><p class="error"><?= $errores['imagen'] ?></p><?php endif; ?>
             <img id="previewImagen" src="<?= BASE_URL . ltrim($rutaImagen, '/') ?>?t=<?= time() ?>" alt="Vista previa de <?= htmlspecialchars($nombre) ?>" width="120" style="margin-top:5px;">
 

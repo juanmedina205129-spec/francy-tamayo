@@ -11,8 +11,11 @@ if (!empty($_SESSION['login'])) {
 
 $errores = [];
 
-function verificarUsuarioAdministrador(string $username, string $password): bool {
-    $db = conectarDB();
+// Límite contra fuerza bruta: intentos fallidos permitidos por IP en la ventana indicada.
+const LOGIN_MAX_INTENTOS = 5;
+const LOGIN_VENTANA_MINUTOS = 15;
+
+function verificarUsuarioAdministrador(mysqli $db, string $username, string $password): bool {
     $stmt = $db->prepare("SELECT username, password FROM usuarios WHERE username = ? LIMIT 1");
     $stmt->bind_param('s', $username);
     $stmt->execute();
@@ -22,17 +25,51 @@ function verificarUsuarioAdministrador(string $username, string $password): bool
     return $usuario && password_verify($password, $usuario['password']);
 }
 
+function intentosFallidosRecientes(mysqli $db, string $ip): int {
+    $stmt = $db->prepare('SELECT COUNT(*) AS total FROM intentos_login WHERE ip = ? AND fecha > NOW() - INTERVAL ? MINUTE');
+    $ventana = LOGIN_VENTANA_MINUTOS;
+    $stmt->bind_param('si', $ip, $ventana);
+    $stmt->execute();
+    return (int) $stmt->get_result()->fetch_assoc()['total'];
+}
+
+function registrarIntentoFallido(mysqli $db, string $ip, string $username): void {
+    $username = mb_substr($username, 0, 50);
+    $stmt = $db->prepare('INSERT INTO intentos_login (ip, username) VALUES (?, ?)');
+    $stmt->bind_param('ss', $ip, $username);
+    $stmt->execute();
+    $db->query('DELETE FROM intentos_login WHERE fecha < NOW() - INTERVAL 1 DAY');
+}
+
+function limpiarIntentos(mysqli $db, string $ip): void {
+    $stmt = $db->prepare('DELETE FROM intentos_login WHERE ip = ?');
+    $stmt->bind_param('s', $ip);
+    $stmt->execute();
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    $username = trim($_POST['username'] ?? '');
-    $password = $_POST['password'] ?? '';
+    $username = entradaTexto($_POST['username'] ?? '');
+    $password = entradaClave($_POST['password'] ?? '');
+    $ip = $_SERVER['REMOTE_ADDR'] ?? 'desconocida';
+    $credencialesValidas = false;
 
     if (!$username || !$password) {
         $errores[] = 'Completa usuario y contraseña.';
     }
 
     try {
-        $credencialesValidas = empty($errores) && verificarUsuarioAdministrador($username, $password);
+        $db = conectarDB();
+        if (intentosFallidosRecientes($db, $ip) >= LOGIN_MAX_INTENTOS) {
+            $errores[] = 'Demasiados intentos fallidos. Espera ' . LOGIN_VENTANA_MINUTOS . ' minutos antes de volver a intentarlo.';
+        } elseif (empty($errores)) {
+            $credencialesValidas = verificarUsuarioAdministrador($db, $username, $password);
+            if ($credencialesValidas) {
+                limpiarIntentos($db, $ip);
+            } else {
+                registrarIntentoFallido($db, $ip, $username);
+            }
+        }
     } catch (Throwable $error) {
         $credencialesValidas = false;
         $errores[] = 'No se pudo conectar con la base de datos del administrador.';
@@ -42,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             session_regenerate_id(true);
             $_SESSION['login'] = true;
             $_SESSION['usuario'] = $username;
-            csrfToken();
+            renovarCsrfToken();
             header('Location: index.php');
             exit;
     } elseif (empty($errores)) {

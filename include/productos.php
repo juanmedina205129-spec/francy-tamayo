@@ -96,7 +96,7 @@ function productosBase(?string $categoria = null, bool $soloActivos = true, ?str
         ['id' => 13, 'nombre' => 'Camiseta Mascota Personalizada', 'categoria' => 'camisetas', 'tipo' => 'Camiseta por encargo', 'descripcion' => 'Camiseta personalizada con mascota.', 'precio' => 110000, 'imagen' => 'assets/imagenes/productos/estuche-buho.png', 'estado' => 'encargo', 'rating' => 4.9, 'destacado' => 0, 'activo' => 1, 'orden' => 4],
     ];
 
-    return array_values(array_filter($productos, static function (array $producto) use ($categoria, $soloActivos): bool {
+    return array_values(array_filter($productos, static function (array $producto) use ($categoria, $soloActivos, $estado): bool {
         if ($soloActivos && (int) $producto['activo'] !== 1) {
             return false;
         }
@@ -135,11 +135,13 @@ function claseEstadoProducto(array $producto): string
 function productosParaJavascript(array $productos): array
 {
     return array_map(static fn(array $producto): array => [
+        'id' => (int) $producto['id'],
         'name' => $producto['nombre'],
         'category' => $producto['tipo'],
         'group' => $producto['categoria'],
         'price' => (float) $producto['precio'],
         'image' => $producto['imagen'],
+        'status' => $producto['estado'],
     ], $productos);
 }
 
@@ -151,6 +153,8 @@ function renderizarTarjetaProducto(array $producto, bool $enlaceCategoria = fals
     $estado = htmlspecialchars(etiquetaEstadoProducto($producto));
     $claseEstado = htmlspecialchars(claseEstadoProducto($producto));
     $rating = number_format((float) $producto['rating'], 1);
+    $estrellasLlenas = (int) round((float) $producto['rating']);
+    $estrellas = str_repeat('★', $estrellasLlenas) . str_repeat('☆', 5 - $estrellasLlenas);
     $precio = formatearPrecioProducto($producto);
     $deshabilitado = $producto['estado'] === 'agotado' ? ' disabled' : '';
     $textoBoton = $producto['estado'] === 'agotado' ? 'Agotado' : ($producto['estado'] === 'encargo' ? 'Encargar' : 'Añadir');
@@ -164,13 +168,13 @@ function renderizarTarjetaProducto(array $producto, bool $enlaceCategoria = fals
         <div class="product-body">
             <span><?= $tipo ?></span>
             <h3><?= $nombre ?></h3>
-            <p class="rating">★★★★★ <?= $rating ?></p>
+            <p class="rating" aria-label="Valoración <?= $rating ?> de 5"><span aria-hidden="true"><?= $estrellas ?></span> <?= $rating ?></p>
             <div class="product-footer">
                 <strong><?= $precio ?></strong>
                 <?php if ($enlaceCategoria): ?>
                     <a href="<?= $urlCategoria ?>">Ver mas</a>
                 <?php else: ?>
-                    <button class="add-to-cart" data-product="<?= $nombre ?>" data-category="<?= $tipo ?>" data-price="<?= (float) $producto['precio'] ?>" data-image="<?= $imagen ?>"<?= $deshabilitado ?>><?= $textoBoton ?></button>
+                    <button class="add-to-cart" data-id="<?= (int) $producto['id'] ?>" data-product="<?= $nombre ?>" data-category="<?= $tipo ?>" data-price="<?= (float) $producto['precio'] ?>" data-image="<?= $imagen ?>"<?= $deshabilitado ?>><?= $textoBoton ?></button>
                 <?php endif; ?>
             </div>
         </div>

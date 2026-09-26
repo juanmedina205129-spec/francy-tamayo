@@ -40,7 +40,7 @@ incluirTemplates('header');
                 <legend><span>2</span> Tu encargo personalizado</legend>
                 <div class="form-grid">
                     <label>¿Qué deseas encargar? *<select name="commission_type" required><option value="">Seleccionar...</option><option>Retrato personalizado</option><option>Pintura original</option><option>Camiseta personalizada</option><option>Otro encargo</option></select></label>
-                    <label>Fecha ideal de entrega<input name="desired_date" type="date"></label>
+                    <label>Fecha ideal de entrega<input name="desired_date" type="date" min="<?= date('Y-m-d') ?>"></label>
                 </div>
                 <div class="form-grid">
                     <label>Tamaño o talla<select name="size"><option value="">Aún no lo sé</option><option>Pequeño</option><option>Mediano</option><option>Grande</option><option>Talla S</option><option>Talla M</option><option>Talla L</option><option>Talla XL</option></select></label>

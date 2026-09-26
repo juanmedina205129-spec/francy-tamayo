@@ -2,7 +2,7 @@
 require 'include/funciones.php';
 require 'include/productos.php';
 
-$estadoFiltro = $_GET['estado'] ?? '';
+$estadoFiltro = entradaTexto($_GET['estado'] ?? '');
 $estadosValidos = ['disponible', 'encargo', 'agotado'];
 if (!in_array($estadoFiltro, $estadosValidos, true)) $estadoFiltro = '';
 $productos = obtenerProductos('retratos', true, $estadoFiltro ?: null);

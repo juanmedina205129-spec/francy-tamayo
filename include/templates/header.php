@@ -4,7 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Francy Tamayo</title>
-<link rel="stylesheet" href="<?php echo BASE_URL;?>assets/css/app.css?v=<?php echo filemtime(__DIR__ . '/../../assets/css/app.css'); ?>">
+<meta name="csrf-token" content="<?= htmlspecialchars(csrfToken()) ?>">
+<meta name="base-url" content="<?= htmlspecialchars(BASE_URL) ?>">
+<?php
+// Hojas de estilo del sitio en orden de cascada (ver assets/css/README.md).
+// Se enlazan por separado para que el navegador las descargue en paralelo;
+// la versión se toma de la fecha de modificación de cada archivo.
+$hojasEstilo = [
+    'base/global.css',
+    'layout/header.css',
+    'layout/footer.css',
+    'componentes/ui.css',
+    'paginas/index.css',
+    'paginas/contacto.css',
+    'paginas/admin.css',
+    'paginas/crear.css',
+    'paginas/menu.css',
+    'paginas/login.css',
+    'paginas/tienda.css',
+];
+foreach ($hojasEstilo as $hoja): ?>
+<link rel="stylesheet" href="<?= BASE_URL ?>assets/css/<?= $hoja ?>?v=<?= filemtime(__DIR__ . '/../../assets/css/' . $hoja) ?>">
+<?php endforeach; ?>
 
 <?php if (isset($estilosExtra) && is_array($estilosExtra)): foreach ($estilosExtra as $href): ?>
 <link rel="stylesheet" href="<?= htmlspecialchars($href) ?>">
@@ -29,8 +50,6 @@
 <a href="<?php echo BASE_URL;?>retratos.php" class="<?php echo $paginaActual === 'retratos.php' ? 'active' : ''; ?>">Retratos</a>
 <a href="<?php echo BASE_URL;?>camisetas.php" class="<?php echo $paginaActual === 'camisetas.php' ? 'active' : ''; ?>">Camisetas</a>
 <a href="<?php echo BASE_URL;?>como-funciona.php" class="<?php echo $paginaActual === 'como-funciona.php' ? 'active' : ''; ?>">Como funciona</a>
-<?php iniciarSesion(); ?>
-
 <?php if (!empty($_SESSION['login'])): ?>
 
 <!-- 🔐 Usuario logueado -->
