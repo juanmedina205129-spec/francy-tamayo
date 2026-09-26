@@ -14,7 +14,7 @@ incluirTemplates('header');
         <div class="container category-hero-content">
             <span class="category-pill accent-red">Servicio especial</span>
             <h1>Retratos a pedido</h1>
-            <p>Envianos la foto de tu mascota y creamos un retrato personalizado que captura su esencia.</p>
+            <p>Envíanos la foto de tu mascota y creamos un retrato personalizado que captura su esencia.</p>
         </div>
     </section>
 
@@ -22,7 +22,7 @@ incluirTemplates('header');
         <div class="container">
             <div class="category-note note-action">
                 <span class="note-icon accent-red">02</span>
-                <p>Los retratos personalizados son nuestra especialidad. Trabajamos con fotografias de alta calidad de tu mascota para crear una obra de arte unica.</p>
+                <p>Los retratos personalizados son nuestra especialidad. Trabajamos con fotografías de alta calidad de tu mascota para crear una obra de arte única.</p>
                 <a href="<?php echo BASE_URL; ?>contacto.php" class="outline-action">Solicitar encargo</a>
             </div>
 
@@ -52,10 +52,10 @@ incluirTemplates('header');
             <div class="category-cta">
                 <div>
                     <h2>¿No encuentras lo que buscas?</h2>
-                    <p>Todos nuestros retratos se hacen a pedido. Envianos la foto de tu mascota y te cotizamos sin compromiso.</p>
+                    <p>Todos nuestros retratos se hacen a pedido. Envíanos la foto de tu mascota y te cotizamos sin compromiso.</p>
                 </div>
                 <div class="hero-actions">
-                    <a href="https://wa.me/573184597719" class="hero-btn hero-btn-primary">WhatsApp</a>
+                    <a target="_blank" rel="noopener" href="https://wa.me/573184597719" class="hero-btn hero-btn-primary">WhatsApp</a>
                     <a href="<?php echo BASE_URL; ?>contacto.php" class="hero-btn hero-btn-light">Formulario</a>
                 </div>
             </div>

@@ -69,16 +69,16 @@ if (isset($_GET['ok'])) {
             <thead>
                 <tr>
                     <th></th>
-                    <th>ID</th>
-                    <th>Nombre</th>
+                    <th data-priority="5">ID</th>
+                    <th data-priority="1">Nombre</th>
                     <th>Categoría</th>
                     <th>Tipo</th>
-                    <th>Precio</th>
+                    <th data-priority="3">Precio</th>
                     <th>Imagen</th>
-                    <th>Estado</th>
+                    <th data-priority="4">Estado</th>
                     <th>Orden</th>
                     <th>Activo</th>
-                    <th>Acciones</th>
+                    <th data-priority="2">Acciones</th>
                 </tr>
             </thead>
 

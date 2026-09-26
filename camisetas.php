@@ -9,14 +9,14 @@ $productos = obtenerProductos('camisetas', true, $estadoFiltro ?: null);
 incluirTemplates('header');
 ?>
 
-<!-- Plantilla para la pagina de categoria de camisetas -->
+<!-- Plantilla para la página de categoría de camisetas -->
 
 <main class="category-page category-shirts">
     <section class="category-hero">
         <div class="container category-hero-content">
             <span class="category-pill accent-gold">Ropa artesanal</span>
             <h1>Camisetas</h1>
-            <p>Diseños de animales en algodon premium. Originales, comodos y con opcion de personalizacion.</p>
+            <p>Diseños de animales en algodón premium. Originales, cómodos y con opción de personalización.</p>
         </div>
     </section>
 
@@ -24,7 +24,7 @@ incluirTemplates('header');
         <div class="container">
             <div class="category-note note-action">
                 <span class="note-icon accent-gold">03</span>
-                <p>Nuestras camisetas combinan diseño artistico con calidad de prenda. Disponibles en diseños fijos del catalogo o completamente personalizadas.</p>
+                <p>Nuestras camisetas combinan diseño artístico con calidad de prenda. Disponibles en diseños fijos del catálogo o completamente personalizadas.</p>
                 <a href="<?php echo BASE_URL; ?>contacto.php" class="outline-action">Solicitar encargo</a>
             </div>
 

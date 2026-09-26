@@ -18,7 +18,7 @@ try {
     // El dashboard sigue mostrando el catálogo base si la base de datos aún no está disponible.
 }
 $catalogo = [
-    ['nombre' => 'Pinturas', 'cantidad' => $conteo['pinturas'], 'detalle' => 'Obras disponibles en el catalogo', 'enlace' => BASE_URL . 'pinturas.php', 'icono' => '✦'],
+    ['nombre' => 'Pinturas', 'cantidad' => $conteo['pinturas'], 'detalle' => 'Obras disponibles en el catálogo', 'enlace' => BASE_URL . 'pinturas.php', 'icono' => '✦'],
     ['nombre' => 'Retratos', 'cantidad' => $conteo['retratos'], 'detalle' => 'Encargos de mascotas y animales', 'enlace' => BASE_URL . 'retratos.php', 'icono' => '♡'],
     ['nombre' => 'Camisetas', 'cantidad' => $conteo['camisetas'], 'detalle' => 'Diseños listos para personalizar', 'enlace' => BASE_URL . 'camisetas.php', 'icono' => '◌'],
 ];
@@ -42,10 +42,22 @@ incluirTemplates('header');
 
         <section class="admin-overview" aria-label="Resumen del catálogo">
             <article class="admin-total-card">
-                <span class="admin-card-icon">✦</span>
-                <div><p>Productos publicados</p><strong><?= $totalProductos ?></strong></div>
-                <div class="admin-state-counts"><span><?= $conteoEstados['disponible'] ?> disponibles</span><span><?= $conteoEstados['encargo'] ?> por encargo</span><span><?= $conteoEstados['agotado'] ?> agotados</span></div>
-                <small><?= $pedidosNuevos ?> encargos nuevos por revisar</small>
+                <div class="admin-total-head">
+                    <span class="admin-card-icon">✦</span>
+                    <div><p>Productos publicados</p><strong><?= $totalProductos ?></strong></div>
+                </div>
+                <ul class="admin-state-counts" aria-label="Productos por disponibilidad">
+                    <li class="is-available"><b><?= $conteoEstados['disponible'] ?></b> <?= $conteoEstados['disponible'] === 1 ? 'disponible' : 'disponibles' ?></li>
+                    <li class="is-custom"><b><?= $conteoEstados['encargo'] ?></b> por encargo</li>
+                    <li class="is-soldout"><b><?= $conteoEstados['agotado'] ?></b> <?= $conteoEstados['agotado'] === 1 ? 'agotado' : 'agotados' ?></li>
+                </ul>
+                <a class="admin-total-orders" href="<?= BASE_URL ?>admin/pedidos.php?estado=nuevo">
+                    <?php if ($pedidosNuevos === 0): ?>
+                        No hay encargos nuevos por revisar
+                    <?php else: ?>
+                        <b><?= $pedidosNuevos ?></b> <?= $pedidosNuevos === 1 ? 'encargo nuevo' : 'encargos nuevos' ?> por revisar →
+                    <?php endif; ?>
+                </a>
             </article>
             <?php foreach ($catalogo as $categoria): ?>
                 <article class="admin-stat-card">

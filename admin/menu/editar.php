@@ -55,11 +55,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!$nombre) $errores['nombre'] = 'El nombre es obligatorio';
     if (!$tipo) $errores['tipo'] = 'El tipo es obligatorio';
-    if (!in_array($categoria, ['pinturas', 'retratos', 'camisetas'], true)) $errores['categoria'] = 'Categoria invalida';
-    if (!in_array($estado, ['disponible', 'encargo', 'agotado'], true)) $errores['estado'] = 'Estado invalido';
-    if ($precio <= 0 || $precio > 99999999) $errores['precio'] = 'Precio invalido (entre 1 y 99.999.999)';
+    if (!in_array($categoria, ['pinturas', 'retratos', 'camisetas'], true)) $errores['categoria'] = 'Categoría inválida';
+    if (!in_array($estado, ['disponible', 'encargo', 'agotado'], true)) $errores['estado'] = 'Estado inválido';
+    if ($precio <= 0 || $precio > 99999999) $errores['precio'] = 'Precio inválido (entre 1 y 99.999.999)';
     if ($orden < -1000000 || $orden > 1000000) $errores['orden'] = 'El orden debe estar entre -1.000.000 y 1.000.000';
-    if ($rating < 0 || $rating > 5) $errores['rating'] = 'La valoracion debe estar entre 0 y 5';
+    if ($rating < 0 || $rating > 5) $errores['rating'] = 'La valoración debe estar entre 0 y 5';
 
     // La imagen nueva se guarda solo si el resto del formulario es válido, para no dejar
     // archivos huérfanos en el disco.
@@ -119,7 +119,7 @@ incluirTemplates('header');
             <input id="nombre" type="text" name="nombre" value="<?= htmlspecialchars($nombre) ?>">
             <?php if (isset($errores['nombre'])): ?><p class="error"><?= $errores['nombre'] ?></p><?php endif; ?>
 
-            <label for="categoria">Categoria</label>
+            <label for="categoria">Categoría</label>
             <select id="categoria" name="categoria">
                 <option value="pinturas" <?= $categoria === 'pinturas' ? 'selected' : '' ?>>Pinturas</option>
                 <option value="retratos" <?= $categoria === 'retratos' ? 'selected' : '' ?>>Retratos</option>
@@ -131,7 +131,7 @@ incluirTemplates('header');
             <input id="tipo" type="text" name="tipo" value="<?= htmlspecialchars($tipo) ?>">
             <?php if (isset($errores['tipo'])): ?><p class="error"><?= $errores['tipo'] ?></p><?php endif; ?>
 
-            <label for="descripcion">Descripcion</label>
+            <label for="descripcion">Descripción</label>
             <textarea id="descripcion" name="descripcion"><?= htmlspecialchars((string) $descripcion) ?></textarea>
 
             <label for="precio">Precio</label>
@@ -146,7 +146,7 @@ incluirTemplates('header');
             </select>
                 <?php if (isset($errores['estado'])): ?><p class="error"><?= htmlspecialchars($errores['estado']) ?></p><?php endif; ?>
 
-            <label for="rating">Valoracion</label>
+            <label for="rating">Valoración</label>
             <input id="rating" type="number" name="rating" min="0" max="5" step="0.1" value="<?= htmlspecialchars((string) $rating) ?>">
             <?php if (isset($errores['rating'])): ?><p class="error"><?= htmlspecialchars($errores['rating']) ?></p><?php endif; ?>
 

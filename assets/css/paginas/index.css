@@ -49,7 +49,7 @@
 }
 
 .home-section .container,
-.custom-order{
+.home-page .custom-order{
     animation:sectionReveal .8s ease both;
 }
 
@@ -98,7 +98,7 @@
 }
 
 .section-link::after{
-    content:" ->";
+    content:" →";
 }
 
 .section-link:hover{
@@ -380,7 +380,7 @@
 }
 
 .category-body a::after{
-    content:" ->";
+    content:" →";
 }
 
 .category-body a:hover,
@@ -510,7 +510,7 @@
 .steps-grid{
     display:grid;
     grid-template-columns:repeat(4, minmax(0, 1fr));
-    gap:56px;
+    gap:28px;
     position:relative;
     z-index:2;
 }
@@ -539,32 +539,29 @@
     background:rgba(255,250,240,.76);
 }
 
-.steps-grid article::before{
-    content:"";
-    display:flex;
-    width:36px;
-    height:36px;
-    margin-bottom:22px;
+.steps-grid span{
+    position:absolute;
+    top:30px;
+    left:30px;
+    display:grid;
+    place-items:center;
+    width:40px;
+    height:40px;
     border-radius:50%;
     background:#447451;
-    box-shadow:0 12px 22px rgba(68,116,81,.22);
+    color:#fff8ea;
+    font-size:14px;
+    font-weight:900;
+    box-shadow:0 10px 20px rgba(33,53,36,.28);
     transition:transform .25s ease, background .25s ease;
 }
 
-.steps-grid article:hover::before{
+.steps-grid article:hover span{
     background:#d95f45;
     transform:scale(1.08);
 }
 
-.steps-grid span{
-    display:block;
-    color:#c9bca8;
-    font-size:24px;
-    font-weight:900;
-    margin-bottom:8px;
-}
-
-.custom-order{
+.home-page .custom-order{
     display:grid;
     min-height:315px;
     margin-top:36px;
@@ -656,7 +653,6 @@
 .category-hero-content{
     position:relative;
     z-index:2;
-    max-width:680px;
     animation:heroReveal .9s ease both;
 }
 
@@ -840,7 +836,6 @@
 
 .portraits-products{
     grid-template-columns:repeat(3, minmax(0, 1fr));
-    max-width:860px;
 }
 
 .category-products .product-image img{
@@ -872,6 +867,7 @@
 }
 
 .category-cta h2{
+    text-align:left;
     color:#213524;
     font-size:27px;
     margin:0 0 8px;
@@ -1032,7 +1028,7 @@
         padding:28px 24px;
     }
 
-    .custom-order{
+    .home-page .custom-order{
         padding:42px 28px;
         margin-bottom:64px;
     }
@@ -1045,4 +1041,15 @@
     .category-hero h1{
         font-size:42px;
     }
+}
+
+/* Precio de productos por encargo: "Desde" como etiqueta pequeña sobre el valor. */
+.product-price small{
+    display:block;
+    margin-bottom:2px;
+    color:#8a7d6b;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:.8px;
+    text-transform:uppercase;
 }

@@ -54,11 +54,12 @@ $campos = [
 ];
 
 $limites = ['nombre' => 120, 'telefono' => 50, 'email' => 150, 'ciudad' => 120, 'detalles' => 5000, 'direccion' => 255, 'notas' => 2000];
+$etiquetasCampos = ['nombre' => 'nombre', 'telefono' => 'teléfono', 'email' => 'correo electrónico', 'ciudad' => 'ciudad', 'detalles' => 'detalles', 'direccion' => 'dirección', 'notas' => 'indicaciones adicionales'];
 $errores = [];
 
 foreach ($limites as $campo => $maximo) {
     if (mb_strlen($campos[$campo]) > $maximo) {
-        $errores[] = "El campo $campo supera los $maximo caracteres.";
+        $errores[] = "El campo {$etiquetasCampos[$campo]} supera los $maximo caracteres.";
     }
 }
 

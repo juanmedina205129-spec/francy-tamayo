@@ -21,3 +21,11 @@
 .order-confirmation{margin:0 24px 18px;padding:18px;border:1px solid #cfe0c9;border-radius:12px;background:#edf6e9;color:#2f2a21}.order-confirmation h3{margin:0 0 6px;font-family:Georgia,serif;color:#233725;font-size:19px}.order-confirmation p{margin:0 0 12px;color:#455a45;font-size:14px;line-height:1.5}.order-confirmation .tracking-code{font-size:16px}.order-confirmation-actions{display:grid;gap:8px}.order-confirmation-actions a{display:block;padding:11px 12px;border-radius:10px;font-size:14px;font-weight:900;text-align:center}.order-confirmation-actions a:first-child{background:#447451;color:#fff}.order-confirmation-actions a:last-child{border:1px solid #b8d1b0;color:#447451}.cart-sync-notice{margin:0;padding:12px 24px;border-bottom:1px solid #eadfce;background:#fff4e0;color:#8a5a14;font-size:14px;font-weight:700}
 .contact-feedback a,.faq-section details a{color:#447451;text-decoration:underline}
 .tracking-card h2,.tracking-card h3,.order-confirmation h3{text-align:left}
+
+/* Ajustes de legibilidad compartidos (guía, contacto, carrito, seguimiento) */
+.guide-page section h2,.contact-aside h2,.form-heading h2,.cart-panel h2{text-align:left}
+.form-grid{align-items:start}
+.contact-form input,.contact-form select,.contact-form textarea,
+.customer-form input,.customer-form select,.customer-form textarea,
+.tracking-form input{font-weight:500}
+.contact-form ::placeholder,.customer-form ::placeholder,.tracking-form ::placeholder{color:#9a8f80;font-weight:400}

@@ -6,7 +6,7 @@
 
 <div>
 <h3>Francy Tamayo</h3>
-<p>Ilustracion de vida silvestre, arte hecho a mano, pinturas originales, retratos de mascotas y camisetas unicas.</p>
+<p>Ilustración de vida silvestre, arte hecho a mano, pinturas originales, retratos de mascotas y camisetas únicas.</p>
 </div>
 
 <div>
@@ -15,7 +15,7 @@
 <a href="<?php echo BASE_URL; ?>pinturas.php">Pinturas</a>
 <a href="<?php echo BASE_URL; ?>retratos.php">Retratos</a>
 <a href="<?php echo BASE_URL; ?>camisetas.php">Camisetas</a>
-<a href="<?php echo BASE_URL; ?>como-funciona.php">Como funciona</a>
+<a href="<?php echo BASE_URL; ?>como-funciona.php">Cómo funciona</a>
 <a href="<?php echo BASE_URL; ?>contacto.php">Contacto</a>
 <a href="<?php echo BASE_URL; ?>seguimiento.php">Seguimiento de pedidos</a>
 </div>
@@ -30,7 +30,7 @@
 </div>
 
 <div class="footer-bottom">
-<?php echo date ('Y')?> Todos los derechos reservados
+© <?php echo date('Y'); ?> Francy Tamayo · Todos los derechos reservados
 </div>
 
 </footer>
