@@ -75,7 +75,6 @@ incluirTemplates('header');
                     <span class="admin-eyebrow">Acciones rápidas</span>
                     <h2 id="admin-actions-title">Revisa el catálogo</h2>
                 </div>
-                <p>Los enlaces se abren en la tienda para comprobar cómo ven los clientes cada sección.</p>
             </div>
 
             <div class="admin-action-grid">
