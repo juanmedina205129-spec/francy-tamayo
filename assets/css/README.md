@@ -13,4 +13,4 @@ Si agregas un archivo nuevo, añádelo a esa lista; la versión para la caché s
 - `paginas/crear.css`: formularios de crear/editar producto.
 - `paginas/menu.css`: tabla/listado de productos del administrador.
 - `paginas/login.css`: login y cambio de contraseña del administrador.
-- `paginas/tienda.css`: buscador, carrito y guia "Como funciona".
+- `paginas/tienda.css`: buscador, carrito, guia "Como funciona", seguimiento de pedidos y los avisos de cupo, foto de referencia y regalo de los formularios de encargo.

@@ -1,8 +1,14 @@
 <?php
 require __DIR__ . '/include/funciones.php';
 require __DIR__ . '/include/productos.php';
+require __DIR__ . '/include/pedidos.php';
 
 $productosDestacados = obtenerProductosDestacados(3);
+
+// Cifras del hero: salen de las reseñas de clientes y del cupo de encargos, nunca se escriben a mano.
+$resumenResenas = obtenerResumenResenas();
+$resenasRecientes = obtenerResenasRecientes(3);
+$cupo = estadoCupoPublico();
 
 incluirTemplates('header');
 ?>
@@ -24,16 +30,24 @@ incluirTemplates('header');
 
                 <div class="hero-stats">
                     <div>
-                        <strong>+200</strong>
-                        <span>obras creadas</span>
+                        <strong><?= $resumenResenas['promedio'] !== null ? number_format($resumenResenas['promedio'], 1, ',', '') . ' ★' : '—' ?></strong>
+                        <span>valoración promedio</span>
                     </div>
                     <div>
-                        <strong>98%</strong>
-                        <span>clientes felices</span>
+                        <strong><?= $resumenResenas['total'] ?></strong>
+                        <span><?= $resumenResenas['total'] === 1 ? 'reseña verificada' : 'reseñas verificadas' ?></span>
                     </div>
                     <div>
-                        <strong>5★</strong>
-                        <span>valoración</span>
+                        <?php if (!$cupo): ?>
+                            <strong>—</strong>
+                            <span>cupos de encargo libres</span>
+                        <?php elseif ($cupo['lleno']): ?>
+                            <strong>Llena</strong>
+                            <span>agenda de encargos</span>
+                        <?php else: ?>
+                            <strong><?= $cupo['disponibles'] ?></strong>
+                            <span><?= $cupo['disponibles'] === 1 ? 'cupo de encargo libre' : 'cupos de encargo libres' ?></span>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -121,20 +135,47 @@ incluirTemplates('header');
                     <p>Te contactamos por WhatsApp para confirmar detalles, tamaño y precio final.</p>
                 </article>
                 <article>
-                    <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/cuadro-buho.png" alt="Ilustración de búho durante la creación de la pieza">
+                    <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/cuadro-buho.png" alt="Ilustración de búho para la aprobación del boceto">
                     <span>03</span>
-                    <h3>Creamos tu pieza</h3>
-                    <p>La obra se realiza con dedicación artesanal y revisión de calidad.</p>
+                    <h3>Apruebas el boceto</h3>
+                    <p>Antes de pintar te mostramos un boceto. Lo apruebas o pides cambios, y sigues el avance con fotos.</p>
                 </article>
                 <article>
-                    <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/cojin-jilguero.png" alt="Ilustración de jilguero para entrega segura">
+                    <img src="<?php echo BASE_URL; ?>assets/imagenes/productos/cojin-jilguero.png" alt="Ilustración de jilguero para la entrega o el regalo">
                     <span>04</span>
-                    <h3>Entrega segura</h3>
-                    <p>Recibes tu pieza lista para disfrutar, decorar o regalar.</p>
+                    <h3>Entrega o regalo</h3>
+                    <p>Recibes tu pieza bien embalada o la enviamos como regalo, con tarjeta y dedicatoria.</p>
                 </article>
             </div>
         </div>
     </section>
+
+    <?php if ($resenasRecientes): ?>
+        <section class="home-section reviews-section" id="resenas">
+            <div class="container">
+                <div class="section-heading-row">
+                    <div>
+                        <span class="section-kicker">Reseñas verificadas</span>
+                        <h2>Lo que dicen nuestros clientes</h2>
+                    </div>
+                    <p class="reviews-summary"><strong><?= number_format($resumenResenas['promedio'], 1, ',', '') ?></strong> <span aria-hidden="true"><?= estrellasTexto($resumenResenas['promedio']) ?></span> · <?= $resumenResenas['total'] ?> <?= $resumenResenas['total'] === 1 ? 'reseña' : 'reseñas' ?></p>
+                </div>
+
+                <div class="reviews-grid">
+                    <?php foreach ($resenasRecientes as $resena): ?>
+                        <article class="review-card">
+                            <p class="review-stars" aria-label="<?= (int) $resena['estrellas'] ?> de 5 estrellas"><span aria-hidden="true"><?= estrellasTexto($resena['estrellas']) ?></span></p>
+                            <blockquote><?= nl2br(htmlspecialchars($resena['comentario'])) ?></blockquote>
+                            <footer>
+                                <strong><?= htmlspecialchars($resena['nombre']) ?></strong>
+                                <span><?= htmlspecialchars($resena['tipo_encargo']) ?> · <?= htmlspecialchars(date('d/m/Y', strtotime($resena['fecha']))) ?></span>
+                            </footer>
+                        </article>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </section>
+    <?php endif; ?>
 
     <section class="custom-order container" id="personalizar">
         <div>
@@ -142,7 +183,7 @@ incluirTemplates('header');
             <h2>¿Quieres el retrato de tu mascota?</h2>
             <p>Cuéntanos sobre tu animal favorito y creamos una obra única. Entrega estimada entre 10 y 20 días hábiles.</p>
             <div class="hero-actions">
-                <a target="_blank" href="https://wa.me/573184597719" class="hero-btn hero-btn-primary">Pedir por WhatsApp</a>
+                <a target="_blank" rel="noopener" href="https://wa.me/573184597719" class="hero-btn hero-btn-primary">Pedir por WhatsApp</a>
                 <a href="<?php echo BASE_URL; ?>contacto.php" class="hero-btn hero-btn-light">Formulario de encargo</a>
             </div>
         </div>

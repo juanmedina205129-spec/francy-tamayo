@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/config/database.php';
+require_once __DIR__ . '/resenas.php';
 
 function obtenerProductos(?string $categoria = null, bool $soloActivos = true, ?string $estado = null): array
 {
@@ -81,19 +82,19 @@ function contarProductosPorCategoria(): array
 function productosBase(?string $categoria = null, bool $soloActivos = true, ?string $estado = null): array
 {
     $productos = [
-        ['id' => 1, 'nombre' => 'Retrato Golden Retriever', 'categoria' => 'pinturas', 'tipo' => 'Pintura al óleo', 'descripcion' => 'Obra original inspirada en mascota.', 'precio' => 280000, 'imagen' => 'assets/imagenes/productos/cuadro-golondrina.png', 'estado' => 'disponible', 'rating' => 4.9, 'destacado' => 1, 'activo' => 1, 'orden' => 1],
-        ['id' => 2, 'nombre' => 'Perro en acuarela', 'categoria' => 'pinturas', 'tipo' => 'Acuarela', 'descripcion' => 'Pieza artesanal en acuarela.', 'precio' => 195000, 'imagen' => 'assets/imagenes/productos/cuadro-jilguero.png', 'estado' => 'disponible', 'rating' => 4.8, 'destacado' => 0, 'activo' => 1, 'orden' => 2],
-        ['id' => 3, 'nombre' => 'Dos gatitos - óleo', 'categoria' => 'pinturas', 'tipo' => 'Pintura al óleo', 'descripcion' => 'Pintura al óleo de mascotas.', 'precio' => 340000, 'imagen' => 'assets/imagenes/productos/cuadro-plumas.png', 'estado' => 'agotado', 'rating' => 4.9, 'destacado' => 0, 'activo' => 1, 'orden' => 3],
-        ['id' => 4, 'nombre' => 'Ave colorida - acuarela', 'categoria' => 'pinturas', 'tipo' => 'Acuarela', 'descripcion' => 'Ilustración de ave en acuarela.', 'precio' => 175000, 'imagen' => 'assets/imagenes/productos/cuadro-buho.png', 'estado' => 'disponible', 'rating' => 4.8, 'destacado' => 0, 'activo' => 1, 'orden' => 4],
-        ['id' => 5, 'nombre' => 'Martín pescador', 'categoria' => 'pinturas', 'tipo' => 'Acuarela', 'descripcion' => 'Ilustración de ave martín pescador.', 'precio' => 160000, 'imagen' => 'assets/imagenes/productos/estuche-golondrina.png', 'estado' => 'disponible', 'rating' => 4.7, 'destacado' => 0, 'activo' => 1, 'orden' => 5],
-        ['id' => 6, 'nombre' => 'Perro blanco - óleo', 'categoria' => 'pinturas', 'tipo' => 'Pintura al óleo', 'descripcion' => 'Retrato de perro al óleo.', 'precio' => 260000, 'imagen' => 'assets/imagenes/productos/estuche-plumas.png', 'estado' => 'disponible', 'rating' => 4.8, 'destacado' => 0, 'activo' => 1, 'orden' => 6],
-        ['id' => 7, 'nombre' => 'Retrato mascota personalizado', 'categoria' => 'retratos', 'tipo' => 'Retrato por encargo', 'descripcion' => 'Retrato personalizado desde foto.', 'precio' => 220000, 'imagen' => 'assets/imagenes/productos/cuadro-buho.png', 'estado' => 'encargo', 'rating' => 5.0, 'destacado' => 1, 'activo' => 1, 'orden' => 1],
-        ['id' => 8, 'nombre' => 'Retrato canino clásico', 'categoria' => 'retratos', 'tipo' => 'Retrato por encargo', 'descripcion' => 'Retrato clásico de mascota.', 'precio' => 250000, 'imagen' => 'assets/imagenes/productos/cuadro-jilguero.png', 'estado' => 'encargo', 'rating' => 4.9, 'destacado' => 0, 'activo' => 1, 'orden' => 2],
-        ['id' => 9, 'nombre' => 'Retrato doble mascotas', 'categoria' => 'retratos', 'tipo' => 'Retrato por encargo', 'descripcion' => 'Retrato doble de mascotas.', 'precio' => 380000, 'imagen' => 'assets/imagenes/productos/cojin-jilguero.png', 'estado' => 'encargo', 'rating' => 5.0, 'destacado' => 0, 'activo' => 1, 'orden' => 3],
-        ['id' => 10, 'nombre' => 'Camiseta Perro Acuarela', 'categoria' => 'camisetas', 'tipo' => 'Camiseta', 'descripcion' => 'Camiseta con diseño animal.', 'precio' => 85000, 'imagen' => 'assets/imagenes/productos/estuche-azulejo.png', 'estado' => 'disponible', 'rating' => 4.7, 'destacado' => 1, 'activo' => 1, 'orden' => 1],
-        ['id' => 11, 'nombre' => 'Camiseta Gato Minimalista', 'categoria' => 'camisetas', 'tipo' => 'Camiseta', 'descripcion' => 'Camiseta con gato minimalista.', 'precio' => 75000, 'imagen' => 'assets/imagenes/productos/estuche-plumas.png', 'estado' => 'disponible', 'rating' => 4.6, 'destacado' => 0, 'activo' => 1, 'orden' => 2],
-        ['id' => 12, 'nombre' => 'Camiseta Tigre Estampado', 'categoria' => 'camisetas', 'tipo' => 'Camiseta', 'descripcion' => 'Camiseta con estampado de tigre.', 'precio' => 90000, 'imagen' => 'assets/imagenes/productos/estuche-golondrina.png', 'estado' => 'disponible', 'rating' => 4.8, 'destacado' => 0, 'activo' => 1, 'orden' => 3],
-        ['id' => 13, 'nombre' => 'Camiseta Mascota Personalizada', 'categoria' => 'camisetas', 'tipo' => 'Camiseta por encargo', 'descripcion' => 'Camiseta personalizada con mascota.', 'precio' => 110000, 'imagen' => 'assets/imagenes/productos/estuche-buho.png', 'estado' => 'encargo', 'rating' => 4.9, 'destacado' => 0, 'activo' => 1, 'orden' => 4],
+        ['id' => 1, 'nombre' => 'Retrato Golden Retriever', 'categoria' => 'pinturas', 'tipo' => 'Pintura al óleo', 'descripcion' => 'Obra original inspirada en mascota.', 'precio' => 280000, 'imagen' => 'assets/imagenes/productos/cuadro-golondrina.png', 'estado' => 'disponible', 'destacado' => 1, 'activo' => 1, 'orden' => 1],
+        ['id' => 2, 'nombre' => 'Perro en acuarela', 'categoria' => 'pinturas', 'tipo' => 'Acuarela', 'descripcion' => 'Pieza artesanal en acuarela.', 'precio' => 195000, 'imagen' => 'assets/imagenes/productos/cuadro-jilguero.png', 'estado' => 'disponible', 'destacado' => 0, 'activo' => 1, 'orden' => 2],
+        ['id' => 3, 'nombre' => 'Dos gatitos - óleo', 'categoria' => 'pinturas', 'tipo' => 'Pintura al óleo', 'descripcion' => 'Pintura al óleo de mascotas.', 'precio' => 340000, 'imagen' => 'assets/imagenes/productos/cuadro-plumas.png', 'estado' => 'agotado', 'destacado' => 0, 'activo' => 1, 'orden' => 3],
+        ['id' => 4, 'nombre' => 'Ave colorida - acuarela', 'categoria' => 'pinturas', 'tipo' => 'Acuarela', 'descripcion' => 'Ilustración de ave en acuarela.', 'precio' => 175000, 'imagen' => 'assets/imagenes/productos/cuadro-buho.png', 'estado' => 'disponible', 'destacado' => 0, 'activo' => 1, 'orden' => 4],
+        ['id' => 5, 'nombre' => 'Martín pescador', 'categoria' => 'pinturas', 'tipo' => 'Acuarela', 'descripcion' => 'Ilustración de ave martín pescador.', 'precio' => 160000, 'imagen' => 'assets/imagenes/productos/estuche-golondrina.png', 'estado' => 'disponible', 'destacado' => 0, 'activo' => 1, 'orden' => 5],
+        ['id' => 6, 'nombre' => 'Perro blanco - óleo', 'categoria' => 'pinturas', 'tipo' => 'Pintura al óleo', 'descripcion' => 'Retrato de perro al óleo.', 'precio' => 260000, 'imagen' => 'assets/imagenes/productos/estuche-plumas.png', 'estado' => 'disponible', 'destacado' => 0, 'activo' => 1, 'orden' => 6],
+        ['id' => 7, 'nombre' => 'Retrato mascota personalizado', 'categoria' => 'retratos', 'tipo' => 'Retrato por encargo', 'descripcion' => 'Retrato personalizado desde foto.', 'precio' => 220000, 'imagen' => 'assets/imagenes/productos/cuadro-buho.png', 'estado' => 'encargo', 'destacado' => 1, 'activo' => 1, 'orden' => 1],
+        ['id' => 8, 'nombre' => 'Retrato canino clásico', 'categoria' => 'retratos', 'tipo' => 'Retrato por encargo', 'descripcion' => 'Retrato clásico de mascota.', 'precio' => 250000, 'imagen' => 'assets/imagenes/productos/cuadro-jilguero.png', 'estado' => 'encargo', 'destacado' => 0, 'activo' => 1, 'orden' => 2],
+        ['id' => 9, 'nombre' => 'Retrato doble mascotas', 'categoria' => 'retratos', 'tipo' => 'Retrato por encargo', 'descripcion' => 'Retrato doble de mascotas.', 'precio' => 380000, 'imagen' => 'assets/imagenes/productos/cojin-jilguero.png', 'estado' => 'encargo', 'destacado' => 0, 'activo' => 1, 'orden' => 3],
+        ['id' => 10, 'nombre' => 'Camiseta Perro Acuarela', 'categoria' => 'camisetas', 'tipo' => 'Camiseta', 'descripcion' => 'Camiseta con diseño animal.', 'precio' => 85000, 'imagen' => 'assets/imagenes/productos/estuche-azulejo.png', 'estado' => 'disponible', 'destacado' => 1, 'activo' => 1, 'orden' => 1],
+        ['id' => 11, 'nombre' => 'Camiseta Gato Minimalista', 'categoria' => 'camisetas', 'tipo' => 'Camiseta', 'descripcion' => 'Camiseta con gato minimalista.', 'precio' => 75000, 'imagen' => 'assets/imagenes/productos/estuche-plumas.png', 'estado' => 'disponible', 'destacado' => 0, 'activo' => 1, 'orden' => 2],
+        ['id' => 12, 'nombre' => 'Camiseta Tigre Estampado', 'categoria' => 'camisetas', 'tipo' => 'Camiseta', 'descripcion' => 'Camiseta con estampado de tigre.', 'precio' => 90000, 'imagen' => 'assets/imagenes/productos/estuche-golondrina.png', 'estado' => 'disponible', 'destacado' => 0, 'activo' => 1, 'orden' => 3],
+        ['id' => 13, 'nombre' => 'Camiseta Mascota Personalizada', 'categoria' => 'camisetas', 'tipo' => 'Camiseta por encargo', 'descripcion' => 'Camiseta personalizada con mascota.', 'precio' => 110000, 'imagen' => 'assets/imagenes/productos/estuche-buho.png', 'estado' => 'encargo', 'destacado' => 0, 'activo' => 1, 'orden' => 4],
     ];
 
     return array_values(array_filter($productos, static function (array $producto) use ($categoria, $soloActivos, $estado): bool {
@@ -146,9 +147,8 @@ function renderizarTarjetaProducto(array $producto, bool $enlaceCategoria = fals
     $imagen = htmlspecialchars($producto['imagen']);
     $estado = htmlspecialchars(etiquetaEstadoProducto($producto));
     $claseEstado = htmlspecialchars(claseEstadoProducto($producto));
-    $rating = number_format((float) $producto['rating'], 1);
-    $estrellasLlenas = (int) round((float) $producto['rating']);
-    $estrellas = str_repeat('★', $estrellasLlenas) . str_repeat('☆', 5 - $estrellasLlenas);
+    // La valoración sale únicamente de las reseñas de clientes (include/resenas.php).
+    $valoracion = obtenerValoracionesProductos()[(int) $producto['id']] ?? null;
     $precio = '$' . number_format((float) $producto['precio'], 0, ',', '.');
     $prefijoPrecio = $producto['estado'] === 'encargo' ? '<small>Desde</small>' : '';
     $deshabilitado = $producto['estado'] === 'agotado' ? ' disabled' : '';
@@ -163,7 +163,12 @@ function renderizarTarjetaProducto(array $producto, bool $enlaceCategoria = fals
         <div class="product-body">
             <span><?= $tipo ?></span>
             <h3><?= $nombre ?></h3>
-            <p class="rating" aria-label="Valoración <?= $rating ?> de 5"><span aria-hidden="true"><?= $estrellas ?></span> <?= $rating ?></p>
+            <?php if ($valoracion): ?>
+                <?php $promedio = number_format($valoracion['promedio'], 1, ',', ''); ?>
+                <p class="rating" aria-label="Valoración <?= $promedio ?> de 5, <?= $valoracion['total'] ?> <?= $valoracion['total'] === 1 ? 'reseña' : 'reseñas' ?>"><span aria-hidden="true"><?= estrellasTexto($valoracion['promedio']) ?></span> <?= $promedio ?> <small>(<?= $valoracion['total'] ?>)</small></p>
+            <?php else: ?>
+                <p class="rating rating-empty">Aún sin reseñas</p>
+            <?php endif; ?>
             <div class="product-footer">
                 <strong class="product-price"><?= $prefijoPrecio ?><?= $precio ?></strong>
                 <?php if ($enlaceCategoria): ?>

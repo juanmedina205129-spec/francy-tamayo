@@ -1,6 +1,11 @@
 <?php
 $scripts = ['Contact'];
 require 'include/funciones.php';
+require 'include/pedidos.php';
+
+$cupo = estadoCupoPublico();
+$cupoLleno = CUPO_BLOQUEA_PEDIDOS && ($cupo['lleno'] ?? false);
+
 incluirTemplates('header');
 ?>
 
@@ -22,7 +27,9 @@ incluirTemplates('header');
                 </div>
                 <span class="contact-response">Respondemos por WhatsApp</span>
             </div>
-            <p class="form-intro">Completa la información que tengas. Podrás enviarnos imágenes de referencia por WhatsApp al confirmar.</p>
+            <p class="form-intro">Completa la información que tengas. Puedes adjuntar aquí mismo la foto de tu mascota.</p>
+
+            <?php incluirTemplates('aviso-cupo', ['cupo' => $cupo]); ?>
 
             <fieldset class="form-section form-section-client">
                 <legend><span>1</span> Tus datos</legend>
@@ -47,22 +54,28 @@ incluirTemplates('header');
                     <label>Presupuesto aproximado<select name="budget"><option value="">Prefiero recibir cotización</option><option>Hasta $150.000</option><option>$150.000 — $300.000</option><option>$300.000 — $500.000</option><option>Más de $500.000</option></select></label>
                 </div>
                 <label>Idea, estilo y detalles *<textarea name="commission_details" rows="5" required placeholder="Ej.: retrato de mi mascota en acuarela, con fondo de flores y una dedicatoria."></textarea></label>
+                <?php incluirTemplates('campo-foto-referencia'); ?>
             </fieldset>
 
-            <button class="contact-submit" type="submit">Enviar solicitud por WhatsApp</button>
+            <?php incluirTemplates('seccion-regalo', ['numero' => 3]); ?>
+
+            <button class="contact-submit" type="submit"<?= $cupoLleno ? ' disabled' : '' ?>><?= $cupoLleno ? 'Agenda completa' : 'Enviar solicitud por WhatsApp' ?></button>
             <p class="contact-feedback" id="contact-feedback" role="status"></p>
         </form>
 
         <aside class="contact-aside">
             <span class="contact-aside-icon" aria-hidden="true">✦</span>
             <h2>Una pieza hecha para ti</h2>
-            <p>Revisaremos tu solicitud y confirmaremos disponibilidad, precio y tiempos antes de iniciar.</p>
+            <p>Revisaremos tu solicitud y confirmaremos disponibilidad, precio y tiempos antes de iniciar. Nada se pinta sin que apruebes el boceto.</p>
             <ul>
                 <li><span>1</span> Cuéntanos tu idea</li>
                 <li><span>2</span> Recibe tu cotización</li>
                 <li><span>3</span> Confirma por WhatsApp</li>
+                <li><span>4</span> Aprueba el boceto</li>
+                <li><span>5</span> Sigue el avance con fotos</li>
             </ul>
             <a target="_blank" rel="noopener" href="https://wa.me/573184597719">Hablar directamente por WhatsApp ↗</a>
+            <a class="contact-aside-track" href="<?= BASE_URL ?>seguimiento.php">¿Ya hiciste un pedido? Ver seguimiento →</a>
         </aside>
     </section>
 </main>

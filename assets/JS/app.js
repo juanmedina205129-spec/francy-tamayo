@@ -1,6 +1,7 @@
 (() => {
-    const cartKey = 'francy-tamayo-cart';
-    const customerDataKey = 'francy-tamayo-customer-data';
+    const cartKey = 'nido-de-arte-cart';
+    const customerDataKey = 'nido-de-arte-customer-data';
+    const ordersKey = 'nido-de-arte-orders';
     const baseUrl = document.querySelector('meta[name="base-url"]')?.content || '/';
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
     const money = value => new Intl.NumberFormat('es-CO', {style: 'currency', currency: 'COP', maximumFractionDigits: 0}).format(value);
@@ -8,11 +9,15 @@
     const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[char]));
     const assetUrl = path => /^(https?:)?\/\//.test(path) || String(path).startsWith('/') ? path : baseUrl + path;
     // El catálogo lo imprime buscador.php desde la base de datos (o su respaldo en PHP).
-    const catalog = Array.isArray(window.FRANCY_PRODUCTS) ? window.FRANCY_PRODUCTS : [];
+    const catalog = Array.isArray(window.NIDO_PRODUCTS) ? window.NIDO_PRODUCTS : [];
 
     const getCart = () => { try { return JSON.parse(localStorage.getItem(cartKey)) || []; } catch { return []; } };
     const saveCart = cart => { try { localStorage.setItem(cartKey, JSON.stringify(cart)); } catch { /* Almacenamiento bloqueado. */ } updateCount(); };
     const updateCount = () => { const count = getCart().reduce((sum, item) => sum + item.quantity, 0); document.querySelectorAll('[data-cart-count]').forEach(el => el.textContent = count); };
+    // Códigos de los últimos pedidos hechos desde este navegador. Solo el código: para ver el
+    // pedido sigue haciendo falta el teléfono.
+    const getOrders = () => { try { const codes = JSON.parse(localStorage.getItem(ordersKey)); return Array.isArray(codes) ? codes.filter(code => /^[A-Z]{2}-[A-Z0-9]{6}$/.test(code)) : []; } catch { return []; } };
+    const rememberOrder = code => { try { localStorage.setItem(ordersKey, JSON.stringify([code, ...getOrders().filter(saved => saved !== code)].slice(0, 5))); } catch { /* Almacenamiento bloqueado. */ } };
     const maxQuantity = 20; // Mismo límite por producto que aplica guardar_pedido.php.
     const addProduct = product => {
         const cart = getCart();
@@ -88,7 +93,9 @@
             ...lines,
             response.subtotal ? `Subtotal: ${money(response.subtotal)}` : '',
             `Encargo: ${values.commission_type}`,
-            `Nombre: ${values.name}`
+            `Nombre: ${values.name}`,
+            values.is_gift ? `Es un regalo para: ${values.gift_for}` : '',
+            response.fotoGuardada ? 'Adjunté la foto de referencia en el pedido.' : ''
         ].filter(Boolean).join('\n');
         box.innerHTML = `<h3>¡Pedido recibido!</h3><p>Guarda tu código para consultar el estado del pedido en cualquier momento.</p><p><span class="tracking-code">${escapeHtml(response.codigo)}</span></p><div class="order-confirmation-actions"><a target="_blank" rel="noopener" href="https://wa.me/573184597719?text=${encodeURIComponent(message)}">Enviar resumen por WhatsApp</a><a href="${escapeHtml(response.seguimiento || baseUrl + 'seguimiento.php')}">Ver seguimiento del pedido</a></div>`;
         box.hidden = false;
@@ -113,20 +120,97 @@
     });
 
     // Envía un encargo a guardar_pedido.php. Lo usan el carrito y el formulario de contacto.
-    window.enviarPedido = (values, options = {}) => fetch(baseUrl + 'guardar_pedido.php', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken},
-        body: JSON.stringify(values),
-        keepalive: !!options.keepalive
-    }).then(response => response.json());
+    // Si los valores traen una foto (File) se envía multipart: el JSON en "datos" y la imagen
+    // en "foto". Sin foto se envía el JSON directamente.
+    window.enviarPedido = (values, options = {}) => {
+        const data = {...values};
+        let photo = null;
+        Object.entries(data).forEach(([name, value]) => {
+            if (!(value instanceof File)) return;
+            if (value.size) photo = value;
+            delete data[name];
+        });
+        const headers = {'X-CSRF-Token': csrfToken};
+        let body;
+        if (photo) {
+            body = new FormData();
+            body.append('datos', JSON.stringify(data));
+            body.append('foto', photo);
+        } else {
+            headers['Content-Type'] = 'application/json';
+            body = JSON.stringify(data);
+        }
+        // keepalive no admite cuerpos grandes, así que no se usa cuando hay foto.
+        return fetch(baseUrl + 'guardar_pedido.php', {method: 'POST', headers, body, keepalive: !!options.keepalive && !photo})
+            .then(response => response.json())
+            .then(response => { if (response.ok && response.codigo) rememberOrder(response.codigo); return response; });
+    };
+
+    // En seguimiento.php: códigos recordados en este dispositivo, para volver al pedido sin buscarlo.
+    const recentOrders = document.querySelector('#recent-orders');
+    if (recentOrders) {
+        const codes = getOrders();
+        const codeInput = document.querySelector('.tracking-form [name="codigo"]');
+        const phoneInput = document.querySelector('.tracking-form [name="telefono"]');
+        if (codes.length && codeInput && phoneInput) {
+            recentOrders.querySelector('[data-recent-orders-list]').innerHTML = codes.map(code => `<button type="button" data-order-code="${escapeHtml(code)}">${escapeHtml(code)}</button>`).join('');
+            recentOrders.hidden = false;
+            recentOrders.addEventListener('click', event => {
+                const button = event.target.closest('[data-order-code]'); if (!button) return;
+                codeInput.value = button.dataset.orderCode; phoneInput.focus();
+            });
+            if (!codeInput.value) codeInput.value = codes[0];
+        }
+    }
+
+    // Foto de referencia (carrito y contacto): vista previa y validación de tipo y tamaño.
+    // Mismos límites que guardar_pedido.php.
+    const photoTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/avif'];
+    const photoMaxBytes = 5000000;
+    document.querySelectorAll('[data-photo-field]').forEach(field => {
+        const input = field.querySelector('input[type="file"]');
+        const preview = field.querySelector('[data-photo-preview]');
+        const error = field.querySelector('[data-photo-error]');
+        const image = preview.querySelector('img');
+        let previewUrl = '';
+        const refresh = () => {
+            const file = input.files[0];
+            let message = '';
+            if (file && !photoTypes.includes(file.type)) message = 'Formato no válido. Usa una foto JPG, PNG, WEBP o AVIF.';
+            else if (file && file.size > photoMaxBytes) message = 'La foto pesa más de 5 MB. Elige una más liviana o envíala por WhatsApp.';
+            // Con un mensaje de validación, reportValidity() impide enviar el formulario.
+            input.setCustomValidity(message);
+            error.textContent = message;
+            error.hidden = !message;
+            if (previewUrl) URL.revokeObjectURL(previewUrl);
+            previewUrl = file && !message ? URL.createObjectURL(file) : '';
+            preview.hidden = !previewUrl;
+            if (previewUrl) { image.src = previewUrl; field.querySelector('[data-photo-name]').textContent = file.name; } else image.removeAttribute('src');
+        };
+        input.addEventListener('change', refresh);
+        field.querySelector('[data-photo-remove]').addEventListener('click', () => { input.value = ''; refresh(); });
+    });
+
+    // Modo regalo: los campos aparecen y "¿Para quién es?" se vuelve obligatorio al marcar la casilla.
+    document.querySelectorAll('[data-gift-section]').forEach(section => {
+        const check = section.querySelector('input[name="is_gift"]');
+        const fields = section.querySelector('[data-gift-fields]');
+        const recipient = section.querySelector('input[name="gift_for"]');
+        const toggle = () => { fields.hidden = !check.checked; recipient.required = check.checked; };
+        check.addEventListener('change', () => { toggle(); if (check.checked) recipient.focus(); });
+        toggle();
+    });
 
     const customerForm = document.querySelector('#customer-form');
     if (customerForm) {
         const savedStatus = document.querySelector('#saved-data-status');
         const formValues = () => { const values = Object.fromEntries(new FormData(customerForm).entries()); delete values.save_data; return values; };
+        // La foto y los datos del regalo son de este pedido: nunca se guardan en el dispositivo.
+        const privateFields = ['reference_photo', 'is_gift', 'gift_for', 'gift_message'];
+        const storableValues = () => { const values = formValues(); privateFields.forEach(name => delete values[name]); return values; };
         const rememberData = () => {
             try {
-                if (customerForm.elements.save_data.checked) localStorage.setItem(customerDataKey, JSON.stringify(formValues()));
+                if (customerForm.elements.save_data.checked) localStorage.setItem(customerDataKey, JSON.stringify(storableValues()));
                 else localStorage.removeItem(customerDataKey);
             } catch { /* Almacenamiento bloqueado. */ }
         };
@@ -135,7 +219,7 @@
             if (savedData) {
                 Object.entries(savedData).forEach(([name, value]) => {
                     const field = customerForm.elements[name];
-                    if (field && field.type !== 'checkbox') field.value = value;
+                    if (field && !privateFields.includes(name) && !['checkbox', 'file'].includes(field.type)) field.value = value;
                 });
                 if (savedStatus) savedStatus.textContent = 'Datos recuperados para ti';
             }
@@ -162,6 +246,8 @@
                         saveCart([]);
                         renderCart();
                         showConfirmation(response, values);
+                    } else if (response.cupoLleno) {
+                        document.querySelectorAll('.confirm-order').forEach(button => { button.disabled = true; button.textContent = 'Agenda completa'; });
                     }
                 })
                 .catch(() => { setFeedback('No pudimos enviar el encargo. Inténtalo nuevamente.', true); });

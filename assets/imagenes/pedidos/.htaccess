@@ -1,0 +1,4 @@
+# Carpeta de fotos de pedidos subidas por formulario: nunca debe ejecutar scripts.
+<FilesMatch "(?i)\.(php[0-9]?|phtml|phar|cgi|pl|py|sh)$">
+    Require all denied
+</FilesMatch>

@@ -23,7 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const nombre = form.nombre.value.trim();
         const tipo = form.tipo.value.trim();
         const precio = Number(form.precio.value);
-        const rating = Number(form.rating.value);
 
         if (!nombre) {
             mostrarError("nombre", "Campo obligatorio");
@@ -37,11 +36,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (form.precio.value === "" || !(precio > 0)) {
             mostrarError("precio", "Precio inválido");
-            errores = true;
-        }
-
-        if (form.rating.value !== "" && (rating < 0 || rating > 5)) {
-            mostrarError("rating", "La valoración debe estar entre 0 y 5");
             errores = true;
         }
 

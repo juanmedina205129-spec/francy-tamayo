@@ -234,7 +234,7 @@
     }
 }
 
-@media(max-width:760px){
+@media(max-width:940px){
     .header{position:static;}
 
     .nav{
@@ -250,4 +250,27 @@
     }
 
     .nav-actions{order:-1;}
+}
+
+/* Con el enlace "Mi pedido" el menú ya no cabe en una fila por debajo de 940px (se apila como
+   en móvil). Entre 941 y 1000px cabe si el botón de WhatsApp queda solo con el icono,
+   y los enlaces no se parten en dos líneas. */
+@media(min-width:941px) and (max-width:1000px){
+    .main-nav{gap:8px;}
+
+    .main-nav > a{white-space:nowrap;}
+
+    .main-nav .btn-admin{
+        padding:8px 10px;
+        font-size:12px;
+    }
+
+    .header .btn-nav{
+        width:38px;
+        height:38px;
+        padding:0;
+        border-radius:50%;
+    }
+
+    .header .btn-nav-label{font-size:0;}
 }

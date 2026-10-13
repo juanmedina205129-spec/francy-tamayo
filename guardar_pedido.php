@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/include/funciones.php';
 require_once __DIR__ . '/include/pedidos.php';
+require_once __DIR__ . '/include/imagenes.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -32,7 +33,9 @@ if ($ultimoPedido && time() - $ultimoPedido < $esperaMinima) {
     responderPedido(429, false, 'Ya recibimos una solicitud hace un momento. Espera unos segundos antes de enviar otra.');
 }
 
-$datos = json_decode(file_get_contents('php://input'), true);
+// Con foto de referencia el navegador envía multipart: el JSON va en el campo "datos" y la
+// imagen en "foto". Sin foto llega el JSON directamente en el cuerpo de la petición.
+$datos = json_decode(isset($_POST['datos']) ? entradaTexto($_POST['datos']) : file_get_contents('php://input'), true);
 if (!is_array($datos)) {
     responderPedido(400, false, 'Solicitud inválida.');
 }
@@ -51,10 +54,21 @@ $campos = [
     'entrega' => pedidoTexto($datos, 'delivery'),
     'direccion' => pedidoTexto($datos, 'address'),
     'notas' => pedidoTexto($datos, 'notes'),
+    'regalo_para' => pedidoTexto($datos, 'gift_for'),
+    'regalo_mensaje' => pedidoTexto($datos, 'gift_message'),
 ];
 
-$limites = ['nombre' => 120, 'telefono' => 50, 'email' => 150, 'ciudad' => 120, 'detalles' => 5000, 'direccion' => 255, 'notas' => 2000];
-$etiquetasCampos = ['nombre' => 'nombre', 'telefono' => 'teléfono', 'email' => 'correo electrónico', 'ciudad' => 'ciudad', 'detalles' => 'detalles', 'direccion' => 'dirección', 'notas' => 'indicaciones adicionales'];
+// Los datos del regalo solo cuentan si la casilla "¿Es un regalo?" está marcada.
+$esRegalo = empty($datos['is_gift']) ? 0 : 1;
+if (!$esRegalo) {
+    $campos['regalo_para'] = $campos['regalo_mensaje'] = '';
+}
+
+$foto = $_FILES['foto'] ?? null;
+$hayFoto = is_array($foto) && ($foto['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE;
+
+$limites = ['nombre' => 120, 'telefono' => 50, 'email' => 150, 'ciudad' => 120, 'detalles' => 5000, 'direccion' => 255, 'notas' => 2000, 'regalo_para' => 120, 'regalo_mensaje' => 500];
+$etiquetasCampos = ['nombre' => 'nombre', 'telefono' => 'teléfono', 'email' => 'correo electrónico', 'ciudad' => 'ciudad', 'detalles' => 'detalles', 'direccion' => 'dirección', 'notas' => 'indicaciones adicionales', 'regalo_para' => '"¿Para quién es?"', 'regalo_mensaje' => 'mensaje para la tarjeta'];
 $errores = [];
 
 foreach ($limites as $campo => $maximo) {
@@ -74,6 +88,9 @@ foreach ($obligatorios as $campo) {
     }
 }
 
+if ($esRegalo && $campos['regalo_para'] === '') {
+    $errores[] = 'Cuéntanos para quién es el regalo.';
+}
 if ($campos['telefono'] !== '' && !preg_match('/^\+?[0-9\s().-]{7,20}$/', $campos['telefono'])) {
     $errores[] = 'Escribe un número de teléfono válido.';
 }
@@ -110,8 +127,18 @@ if ($errores) {
     responderPedido(422, false, $errores[0]);
 }
 
+$rutaFoto = null;
+
 try {
     $db = conectarDB();
+
+    // El cupo se comprueba y el pedido se guarda dentro de la misma transacción. Si se
+    // responde antes del commit, la conexión se cierra y la transacción se deshace sola.
+    $db->begin_transaction();
+    $cupo = estadoCupoEncargos($db, true);
+    if (CUPO_BLOQUEA_PEDIDOS && $cupo['lleno']) {
+        responderPedido(409, false, mensajeCupoLleno($cupo), ['cupoLleno' => true]);
+    }
 
     $lineas = [];
     $subtotal = 0.0;
@@ -122,13 +149,22 @@ try {
         }
     }
 
+    // La foto se guarda al final, cuando el resto del pedido ya es válido, para no dejar
+    // archivos sin pedido en el disco.
+    if ($hayFoto) {
+        [$rutaFoto, $errorFoto] = guardarImagenSubida($foto, CARPETA_FOTOS_PEDIDO, MAXIMO_FOTO_PEDIDO);
+        if ($errorFoto) {
+            responderPedido(422, false, 'Foto de referencia: ' . $errorFoto);
+        }
+    }
+
     $valores = array_map(static fn(string $valor): ?string => $valor === '' ? null : $valor, $campos);
     $productosJson = json_encode($lineas, JSON_UNESCAPED_UNICODE);
 
-    $stmt = $db->prepare('INSERT INTO pedidos (codigo, origen, nombre, telefono, email, ciudad, tipo_encargo, fecha_entrega, tamano, presupuesto, detalles, entrega, direccion, notas, productos, subtotal) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+    $stmt = $db->prepare('INSERT INTO pedidos (codigo, origen, nombre, telefono, email, ciudad, tipo_encargo, fecha_entrega, tamano, presupuesto, detalles, entrega, direccion, notas, productos, subtotal, foto_referencia, es_regalo, regalo_para, regalo_mensaje) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
     $codigo = '';
     $stmt->bind_param(
-        'sssssssssssssssd',
+        'sssssssssssssssdsiss',
         $codigo,
         $origen,
         $valores['nombre'],
@@ -144,7 +180,11 @@ try {
         $valores['direccion'],
         $valores['notas'],
         $productosJson,
-        $subtotal
+        $subtotal,
+        $rutaFoto,
+        $esRegalo,
+        $valores['regalo_para'],
+        $valores['regalo_mensaje']
     );
     // El código es aleatorio; si por casualidad ya existe se genera otro.
     for ($intento = 1; ; $intento++) {
@@ -158,15 +198,19 @@ try {
             }
         }
     }
+    $db->commit();
     $_SESSION['ultimo_pedido'] = time();
 
     responderPedido(200, true, 'Tu encargo fue enviado. Te contactaremos por WhatsApp para confirmarlo.', [
         'codigo' => $codigo,
         'subtotal' => $subtotal,
         'productos' => $lineas,
+        'fotoGuardada' => $rutaFoto !== null,
         'seguimiento' => BASE_URL . 'seguimiento.php?codigo=' . rawurlencode($codigo),
     ]);
 } catch (Throwable $error) {
+    // El pedido no llegó a guardarse: la foto que ya se había subido se borra.
+    eliminarImagenSubida($rutaFoto, CARPETA_FOTOS_PEDIDO);
     error_log('guardar_pedido: ' . $error->getMessage());
     responderPedido(500, false, 'No pudimos guardar el encargo. Inténtalo nuevamente.');
 }

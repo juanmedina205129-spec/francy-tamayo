@@ -1053,3 +1053,92 @@
     letter-spacing:.8px;
     text-transform:uppercase;
 }
+
+/* Valoración de las tarjetas: se calcula con las reseñas de clientes. */
+.rating small{
+    color:#8b8173;
+    font-size:13px;
+}
+
+.rating-empty{
+    color:#9a8f80;
+    font-size:13px;
+    font-style:italic;
+}
+
+/* Reseñas de clientes en el inicio */
+.reviews-section{
+    background:
+        radial-gradient(circle at 88% 14%, rgba(233,174,84,.18), transparent 28%),
+        linear-gradient(135deg, #f6efe2 0%, #efe6d7 100%);
+}
+
+.reviews-summary{
+    color:#6f665b;
+    font-size:14px;
+    font-weight:700;
+}
+
+.reviews-summary strong{
+    color:#213524;
+    font-family:Georgia,serif;
+    font-size:24px;
+}
+
+.reviews-summary span,
+.review-stars{
+    color:#d99b35;
+    letter-spacing:2px;
+}
+
+.reviews-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
+    gap:24px;
+}
+
+.review-card{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    padding:26px;
+    border:1px solid #e6ddce;
+    border-top:4px solid #e9ae54;
+    border-radius:8px;
+    background:linear-gradient(180deg, #fffaf0 0%, #f8efdf 100%);
+    box-shadow:0 18px 35px rgba(67,55,39,.08);
+}
+
+.review-stars{
+    font-size:19px;
+}
+
+.review-card blockquote{
+    flex:1;
+    color:#4c4436;
+    font-size:15px;
+    line-height:1.65;
+    overflow-wrap:anywhere;
+}
+
+.review-card footer{
+    display:grid;
+    gap:2px;
+    padding-top:14px;
+    border-top:1px solid #e8dfd0;
+}
+
+.review-card footer strong{
+    color:#213524;
+}
+
+.review-card footer span{
+    color:#8b8173;
+    font-size:12px;
+}
+
+@media(max-width:700px){
+    .reviews-grid{
+        grid-template-columns:1fr;
+    }
+}

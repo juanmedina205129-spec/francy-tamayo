@@ -5,7 +5,7 @@
 <div class="footer-content container">
 
 <div>
-<h3>Francy Tamayo</h3>
+<h3>Nido de Arte</h3>
 <p>Ilustración de vida silvestre, arte hecho a mano, pinturas originales, retratos de mascotas y camisetas únicas.</p>
 </div>
 
@@ -24,13 +24,13 @@
 <h4>Encuéntranos</h4>
 <p>Palmira, Valle del Cauca</p>
 <p>+57 318 459 7719</p>
-<p>@francy.tamayo</p>
+<p>@nidodearte</p>
 </div>
 
 </div>
 
 <div class="footer-bottom">
-© <?php echo date('Y'); ?> Francy Tamayo · Todos los derechos reservados
+© <?php echo date('Y'); ?> Nido de Arte · Todos los derechos reservados
 </div>
 
 </footer>

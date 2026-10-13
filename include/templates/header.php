@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Francy Tamayo</title>
+<title>Nido de Arte</title>
 <meta name="csrf-token" content="<?= htmlspecialchars(csrfToken()) ?>">
 <meta name="base-url" content="<?= htmlspecialchars(BASE_URL) ?>">
 <?php
@@ -41,7 +41,7 @@ foreach ($hojasEstilo as $hoja): ?>
 <header class="header">
 <div class="container nav">
 
-<div class="logo">Francy <span>Tamayo</span></div>
+<div class="logo">Nido <span>de Arte</span></div>
 
 <?php $paginaActual = basename($_SERVER['PHP_SELF']); ?>
 <nav class="main-nav" aria-label="Navegación principal">
@@ -50,6 +50,7 @@ foreach ($hojasEstilo as $hoja): ?>
 <a href="<?php echo BASE_URL;?>retratos.php" class="<?php echo $paginaActual === 'retratos.php' ? 'active' : ''; ?>">Retratos</a>
 <a href="<?php echo BASE_URL;?>camisetas.php" class="<?php echo $paginaActual === 'camisetas.php' ? 'active' : ''; ?>">Camisetas</a>
 <a href="<?php echo BASE_URL;?>como-funciona.php" class="<?php echo $paginaActual === 'como-funciona.php' ? 'active' : ''; ?>">Cómo funciona</a>
+<a href="<?php echo BASE_URL;?>seguimiento.php" class="<?php echo $paginaActual === 'seguimiento.php' ? 'active' : ''; ?>">Mi pedido</a>
 <?php if (!empty($_SESSION['login'])): ?>
 
 <!-- 🔐 Usuario logueado -->

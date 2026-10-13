@@ -1,0 +1,4 @@
+# Fotos subidas por clientes y por la administradora: no se versionan.
+*
+!.gitignore
+!.htaccess

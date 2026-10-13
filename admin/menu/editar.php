@@ -31,7 +31,6 @@ $precio = $producto['precio'];
 $categoria = $producto['categoria'];
 $tipo = $producto['tipo'];
 $estado = $producto['estado'];
-$rating = $producto['rating'];
 $orden = $producto['orden'];
 $destacado = (int) $producto['destacado'];
 $activo = (int) $producto['activo'];
@@ -47,7 +46,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $categoria = entradaTexto($_POST['categoria'] ?? 'pinturas');
     $tipo = entradaTexto($_POST['tipo'] ?? '');
     $estado = entradaTexto($_POST['estado'] ?? 'disponible');
-    $rating = (float) entradaTexto($_POST['rating'] ?? '4.8');
     $orden = (int) entradaTexto($_POST['orden'] ?? '0');
     $destacado = isset($_POST['destacado']) ? 1 : 0;
     $activo = isset($_POST['activo']) ? 1 : 0;
@@ -59,7 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!in_array($estado, ['disponible', 'encargo', 'agotado'], true)) $errores['estado'] = 'Estado inválido';
     if ($precio <= 0 || $precio > 99999999) $errores['precio'] = 'Precio inválido (entre 1 y 99.999.999)';
     if ($orden < -1000000 || $orden > 1000000) $errores['orden'] = 'El orden debe estar entre -1.000.000 y 1.000.000';
-    if ($rating < 0 || $rating > 5) $errores['rating'] = 'La valoración debe estar entre 0 y 5';
 
     // La imagen nueva se guarda solo si el resto del formulario es válido, para no dejar
     // archivos huérfanos en el disco.
@@ -75,8 +72,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($errores)) {
         try {
-            $stmt = $db->prepare('UPDATE productos SET nombre=?, categoria=?, tipo=?, descripcion=?, precio=?, imagen=?, estado=?, rating=?, destacado=?, activo=?, orden=? WHERE id=?');
-            $stmt->bind_param('ssssdssdiiii', $nombre, $categoria, $tipo, $descripcion, $precio, $rutaImagen, $estado, $rating, $destacado, $activo, $orden, $id);
+            $stmt = $db->prepare('UPDATE productos SET nombre=?, categoria=?, tipo=?, descripcion=?, precio=?, imagen=?, estado=?, destacado=?, activo=?, orden=? WHERE id=?');
+            $stmt->bind_param('ssssdssiiii', $nombre, $categoria, $tipo, $descripcion, $precio, $rutaImagen, $estado, $destacado, $activo, $orden, $id);
             $stmt->execute();
             if ($rutaImagen !== $imagenAnterior) eliminarImagenProductoSubida($imagenAnterior);
 
@@ -146,9 +143,6 @@ incluirTemplates('header');
             </select>
                 <?php if (isset($errores['estado'])): ?><p class="error"><?= htmlspecialchars($errores['estado']) ?></p><?php endif; ?>
 
-            <label for="rating">Valoración</label>
-            <input id="rating" type="number" name="rating" min="0" max="5" step="0.1" value="<?= htmlspecialchars((string) $rating) ?>">
-            <?php if (isset($errores['rating'])): ?><p class="error"><?= htmlspecialchars($errores['rating']) ?></p><?php endif; ?>
 
             <label for="orden">Orden</label>
             <input id="orden" type="number" name="orden" value="<?= htmlspecialchars((string) $orden) ?>">

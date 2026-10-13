@@ -15,7 +15,6 @@ $precio = '';
 $categoria = 'pinturas';
 $tipo = '';
 $estado = 'disponible';
-$rating = '4.8';
 $orden = '0';
 $destacado = 0;
 $activo = 1;
@@ -30,7 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $categoria = entradaTexto($_POST['categoria'] ?? 'pinturas');
     $tipo = entradaTexto($_POST['tipo'] ?? '');
     $estado = entradaTexto($_POST['estado'] ?? 'disponible');
-    $rating = (float) entradaTexto($_POST['rating'] ?? '4.8');
     $orden = (int) entradaTexto($_POST['orden'] ?? '0');
     $destacado = isset($_POST['destacado']) ? 1 : 0;
     $activo = isset($_POST['activo']) ? 1 : 0;
@@ -42,7 +40,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!in_array($estado, ['disponible', 'encargo', 'agotado'], true)) $errores['estado'] = 'Estado inválido';
     if ($precio <= 0 || $precio > 99999999) $errores['precio'] = 'Precio inválido (entre 1 y 99.999.999)';
     if ($orden < -1000000 || $orden > 1000000) $errores['orden'] = 'El orden debe estar entre -1.000.000 y 1.000.000';
-    if ($rating < 0 || $rating > 5) $errores['rating'] = 'La valoración debe estar entre 0 y 5';
     if (!$imagen || empty($imagen['tmp_name'])) $errores['imagen'] = 'La imagen es obligatoria';
 
     if (empty($errores)) {
@@ -51,8 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errores['imagen'] = $errorImagen;
         } else {
             try {
-                $stmt = $db->prepare('INSERT INTO productos (nombre, categoria, tipo, descripcion, precio, imagen, estado, rating, destacado, activo, orden) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-                $stmt->bind_param('ssssdssdiii', $nombre, $categoria, $tipo, $descripcion, $precio, $rutaDB, $estado, $rating, $destacado, $activo, $orden);
+                $stmt = $db->prepare('INSERT INTO productos (nombre, categoria, tipo, descripcion, precio, imagen, estado, destacado, activo, orden) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+                $stmt->bind_param('ssssdssiii', $nombre, $categoria, $tipo, $descripcion, $precio, $rutaDB, $estado, $destacado, $activo, $orden);
                 $stmt->execute();
 
                 header('Location: index.php?ok=creado');
@@ -122,9 +119,6 @@ incluirTemplates('header');
                 </select>
                     <?php if (isset($errores['estado'])): ?><p class="error"><?= htmlspecialchars($errores['estado']) ?></p><?php endif; ?>
 
-                <label for="rating">Valoración</label>
-                <input id="rating" type="number" name="rating" min="0" max="5" step="0.1" value="<?php echo htmlspecialchars((string) $rating); ?>">
-                <?php if (isset($errores['rating'])): ?><p class="error"><?= htmlspecialchars($errores['rating']) ?></p><?php endif; ?>
 
                 <label for="orden">Orden</label>
                 <input id="orden" type="number" name="orden" value="<?php echo htmlspecialchars((string) $orden); ?>">

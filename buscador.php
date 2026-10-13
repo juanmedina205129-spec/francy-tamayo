@@ -28,7 +28,7 @@ $busqueda = entradaTexto($_GET['q'] ?? '');
 </main>
 
 <script>
-window.FRANCY_PRODUCTS = <?= json_encode(productosParaJavascript($productos), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG); ?>;
+window.NIDO_PRODUCTS = <?= json_encode(productosParaJavascript($productos), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG); ?>;
 </script>
 
 <?php include 'include/templates/footer.php'; ?>

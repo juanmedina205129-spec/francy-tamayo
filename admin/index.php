@@ -7,6 +7,7 @@ auth();
 $conteo = contarProductosPorCategoria();
 $conteoEstados = ['disponible' => 0, 'encargo' => 0, 'agotado' => 0];
 $pedidosNuevos = 0;
+$cupo = null;
 try {
     $db = conectarDB();
     $resultadoEstados = $db->query('SELECT estado, COUNT(*) AS total FROM productos WHERE activo = 1 GROUP BY estado');
@@ -14,6 +15,7 @@ try {
         $conteoEstados[$fila['estado']] = (int) $fila['total'];
     }
     $pedidosNuevos = (int) $db->query("SELECT COUNT(*) AS total FROM pedidos WHERE estado = 'nuevo'")->fetch_assoc()['total'];
+    $cupo = estadoCupoEncargos($db);
 } catch (Throwable $error) {
     // El dashboard sigue mostrando el catálogo base si la base de datos aún no está disponible.
 }
@@ -33,7 +35,7 @@ incluirTemplates('header');
     <section class="admin-dashboard container" aria-labelledby="dashboard-title">
         <div class="admin-welcome">
             <div>
-                <span class="admin-eyebrow">Administración · Francy Tamayo</span>
+                <span class="admin-eyebrow">Administración · Nido de Arte</span>
                 <h1 id="dashboard-title">Hola, <?= $usuario ?></h1>
                 <p>Desde aquí tienes una vista clara del catálogo público y accesos rápidos para revisarlo.</p>
             </div>
@@ -58,6 +60,11 @@ incluirTemplates('header');
                         <b><?= $pedidosNuevos ?></b> <?= $pedidosNuevos === 1 ? 'encargo nuevo' : 'encargos nuevos' ?> por revisar →
                     <?php endif; ?>
                 </a>
+                <?php if ($cupo): ?>
+                    <a class="admin-total-orders admin-total-quota" href="<?= BASE_URL ?>admin/pedidos.php">
+                        Cupo de encargos: <b><?= $cupo['ocupados'] ?> de <?= $cupo['cupo'] ?></b> ocupados<?= $cupo['cupo'] === 0 ? ' · pausados' : ($cupo['lleno'] ? ' · agenda completa' : '') ?> →
+                    </a>
+                <?php endif; ?>
             </article>
             <?php foreach ($catalogo as $categoria): ?>
                 <article class="admin-stat-card">
@@ -92,7 +99,7 @@ incluirTemplates('header');
                 <?php endforeach; ?>
                 <a href="<?= BASE_URL ?>admin/pedidos.php" class="admin-action-card admin-action-featured">
                     <span>✉</span>
-                    <div><strong>Encargos personalizados</strong><small>Consultar pedidos del carrito y del formulario de contacto</small></div>
+                    <div><strong>Encargos personalizados</strong><small>Pedidos, cupo de encargos, bocetos y fotos del avance</small></div>
                     <b>→</b>
                 </a>
                 <a href="<?= BASE_URL ?>admin/cambiar-clave.php" class="admin-action-card">
